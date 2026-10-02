@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plate Trainer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='20' width='56' height='24' rx='4' fill='%23f5c518'/><rect x='4' y='20' width='10' height='24' rx='3' fill='%23234ea8'/></svg>">
+<style>
+:root{
+  --bg:#12141a; --panel:#1b1e27; --panel2:#232735; --line:#2f3444; --text:#e8eaf0; --muted:#9aa1b3;
+  --accent:#f5c518; --accent-ink:#1a1400; --good:#3ecf8e; --bad:#ff5d6c; --blue:#5b8cff;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select{font:inherit;color:inherit}
+header{display:flex;align-items:center;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
+.logo .plate{width:38px;height:16px;border-radius:3px;background:linear-gradient(90deg,#234ea8 0 22%,var(--accent) 22%)}
+nav{display:flex;gap:4px;margin-left:auto}
+nav button{background:none;border:0;padding:8px 14px;border-radius:8px;color:var(--muted);cursor:pointer;font-weight:600}
+nav button.on{background:var(--panel2);color:var(--text)}
+main{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+h2{margin:0 0 14px;font-size:20px}
+h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--panel2);padding:7px 12px;border-radius:999px;cursor:pointer;user-select:none;font-size:14px}
+.chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.chip small{opacity:.7;margin-left:4px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;padding:11px 20px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn:disabled{opacity:.4;cursor:default}
+.hint{color:var(--muted);font-size:13px}
+.poolcount{margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* quiz */
+.qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;flex-wrap:wrap}
+.bar{height:6px;background:var(--panel2);border-radius:99px;overflow:hidden;flex:1;min-width:120px}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.score{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+.score b{color:var(--text)}
+.imgwrap{background:#0b0c10;border-radius:var(--radius);display:flex;justify-content:center;align-items:center;min-height:260px;max-height:52vh;overflow:hidden;cursor:zoom-in;border:1px solid var(--line)}
+.imgwrap img{max-width:100%;max-height:52vh;min-height:240px;object-fit:contain;display:block}
+.question{font-weight:700;font-size:17px;margin:16px 0 10px;display:flex;align-items:center;gap:10px}
+.step{font-size:12px;background:var(--panel2);border:1px solid var(--line);padding:2px 8px;border-radius:99px;color:var(--muted);font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;font-weight:600}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt kbd{font:600 11px ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-left:auto}
+.opt.good{background:rgba(62,207,142,.15);border-color:var(--good)}
+.opt.bad{background:rgba(255,93,108,.15);border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.flag{width:24px;height:16px;object-fit:cover;border-radius:2px;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.feedback{margin-top:14px;border-radius:10px;padding:14px;border:1px solid var(--line);background:var(--panel2)}
+.feedback .verdict{font-weight:800;font-size:17px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.feedback .verdict.good{color:var(--good)} .feedback .verdict.bad{color:var(--bad)}
+.feedback p{margin:8px 0 0;color:#cfd3de}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:12px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:2px 9px;color:var(--muted)}
+.tag.ml{color:var(--accent);border-color:rgba(245,197,24,.5)}
+.next{margin-top:14px;display:flex;gap:10px;align-items:center}
+.typebox{position:relative;max-width:460px}
+.typebox input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);outline:none;font-size:16px}
+.typebox input:focus{border-color:var(--accent)}
+.sugg{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;overflow:hidden;z-index:5}
+.sugg div{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer}
+.sugg div.on,.sugg div:hover{background:var(--line)}
+.sugg small{color:var(--muted);margin-left:auto;font-size:12px}
+
+/* summary */
+.big{font-size:40px;font-weight:800}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin:6px 0 18px}
+.stats div span{display:block;color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.card .thumb{height:150px;background:#0b0c10;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+.card .thumb img{max-width:100%;max-height:150px;object-fit:contain}
+.card .body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card .name{font-weight:700;display:flex;align-items:center;gap:8px}
+.card .note{font-size:13px;color:#c4c9d6}
+.card .yours{font-size:12px;color:var(--bad)}
+.card.hidden .reveal{display:none}
+.card .cover{display:none;color:var(--muted);font-size:13px;cursor:pointer;padding:8px;border:1px dashed var(--line);border-radius:8px;text-align:center}
+.card.hidden .cover{display:block}
+.studybar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.studybar input,.studybar select{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.switch{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;color:var(--muted);font-size:14px}
+.switch input{accent-color:var(--accent);width:16px;height:16px}
+
+/* lightbox */
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:100%;image-rendering:auto;min-width:min(90vw,800px);object-fit:contain}
+.hidden-el{display:none!important}
+@media (max-width:600px){ header{padding:10px 14px} .logo span{display:none} .opts{grid-template-columns:1fr 1fr} .opt kbd{display:none} }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><div class="plate"></div><span>Plate Trainer</span></div>
+  <nav>
+    <button id="tab-quiz" class="on">Quiz</button>
+    <button id="tab-study">Study</button>
+  </nav>
+</header>
+<main>
+  <!-- SETUP -->
+  <section id="setup" class="panel">
+    <h2>New round</h2>
+    <h3>Answer mode</h3>
+    <div class="row" id="opt-mode">
+      <div class="chip" data-v="mcq">Multiple choice</div>
+      <div class="chip" data-v="type">Type the country</div>
+    </div>
+    <div id="contstep-row">
+      <h3>Continent step</h3>
+      <div class="row" id="opt-contstep">
+        <div class="chip" data-v="on">Continent → Country</div>
+        <div class="chip" data-v="off">Country only</div>
+      </div>
+    </div>
+    <h3>Continents</h3>
+    <div class="row" id="opt-continents"></div>
+    <h3>Category</h3>
+    <div class="row" id="opt-category"></div>
+    <h3>Round length</h3>
+    <div class="row" id="opt-length">
+      <div class="chip" data-v="10">10</div>
+      <div class="chip" data-v="20">20</div>
+      <div class="chip" data-v="0">All</div>
+    </div>
+    <div class="poolcount">
+      <button class="btn" id="start">Start</button>
+      <span class="hint" id="poolinfo"></span>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="hidden-el">
+    <div class="qtop">
+      <button class="btn ghost" id="quit" style="padding:7px 12px">✕ Quit</button>
+      <div class="bar"><i id="progress"></i></div>
+      <div class="score" id="scoreline"></div>
+    </div>
+    <div class="imgwrap" id="qimgwrap"><img id="qimg" alt="License plate"></div>
+    <div id="qarea"></div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section id="summary" class="hidden-el"></section>
+
+  <!-- STUDY -->
+  <section id="study" class="hidden-el">
+    <div class="studybar">
+      <input id="s-search" placeholder="Search country or note…" style="min-width:200px">
+      <select id="s-cont"></select>
+      <select id="s-cat"></select>
+      <label class="switch"><input type="checkbox" id="s-hide"> Hide answers (flashcards)</label>
+      <span class="hint" id="s-count"></span>
+    </div>
+    <div class="grid" id="s-grid"></div>
+  </section>
+</main>
+<div class="lb" id="lb"><img id="lbimg" alt=""></div>
+
+<script src="data/countries.js"></script>
+<script src="data/plates.js"></script>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+  // ---------- data prep ----------
+  const C = {}; COUNTRIES.forEach(c => C[c.n] = c);
+  const bad = PLATES.filter(p => !C[p.country]);
+  if (bad.length) console.warn('Plates with unknown country (add them to countries.js):', bad.map(p => p.country));
+  PLATES.forEach(p => { p.continent = p.continent || (C[p.country] && C[p.country].c); });
+  // Country look-tags = countries.js tags ∪ tags of its dataset plates
+  const ctags = {};
+  COUNTRIES.forEach(c => ctags[c.n] = new Set(c.t || []));
+  PLATES.forEach(p => { (ctags[p.country] ||= new Set()); p.tags.forEach(t => ctags[p.country].add(t)); });
+
+  const flag = n => { const c = C[n]; return c ? `<img class="flag" src="https://flagcdn.com/w40/${c.f.toLowerCase()}.png" alt="" loading="lazy" onerror="this.style.display='none'">` : ''; };
+
+  const CATS = [['all', 'All plates'], ['ml', '★ Must learn'], ...Object.entries(TAG_LABELS)];
+  const inCat = (p, cat) => cat === 'all' || (cat === 'ml' ? p.mustLearn : p.tags.includes(cat));
+
+  // ---------- settings ----------
+  const DEF = { mode: 'mcq', contstep: 'on', continents: CONTINENTS.slice(), category: 'all', length: '20' };
+  let S = DEF;
+  try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('plateTrainer.settings') || '{}')); } catch (e) {}
+  const save = () => { try { localStorage.setItem('plateTrainer.settings', JSON.stringify(S)); } catch (e) {} };
+
+  function bindSingle(id, key) {
+    const el = $(id);
+    el.querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S[key] = ch.dataset.v; save(); renderSetup(); });
+  }
+  bindSingle('#opt-mode', 'mode'); bindSingle('#opt-contstep', 'contstep'); bindSingle('#opt-length', 'length');
+
+  const pool = () => PLATES.filter(p => S.continents.includes(p.continent) && inCat(p, S.category));
+
+  function renderSetup() {
+    ['#opt-mode:mode', '#opt-contstep:contstep', '#opt-length:length'].forEach(x => {
+      const [id, k] = x.split(':');
+      $(id).querySelectorAll('.chip').forEach(ch => ch.classList.toggle('on', ch.dataset.v === S[k]));
+    });
+    $('#contstep-row').classList.toggle('hidden-el', S.mode !== 'mcq');
+    $('#opt-continents').innerHTML = CONTINENTS.map(c => {
+      const n = PLATES.filter(p => p.continent === c).length;
+      return `<div class="chip ${S.continents.includes(c) ? 'on' : ''}" data-v="${c}">${c}<small>${n}</small></div>`;
+    }).join('');
+    $('#opt-continents').querySelectorAll('.chip').forEach(ch => ch.onclick = () => {
+      const v = ch.dataset.v;
+      S.continents = S.continents.includes(v) ? S.continents.filter(x => x !== v) : [...S.continents, v];
+      save(); renderSetup();
+    });
+    $('#opt-category').innerHTML = CATS.map(([k, l]) => {
+      const n = PLATES.filter(p => inCat(p, k)).length;
+      return n ? `<div class="chip ${S.category === k ? 'on' : ''}" data-v="${k}">${esc(l)}<small>${n}</small></div>` : '';
+    }).join('');
+    $('#opt-category').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.category = ch.dataset.v; save(); renderSetup(); });
+    const n = pool().length;
+    $('#poolinfo').textContent = n ? `${n} plate${n > 1 ? 's' : ''} in pool` : 'No plates match these filters';
+    $('#start').disabled = !n;
+  }
+
+  // ---------- distractors ----------
+  const jitter = () => Math.random() * 0.9;
+  function countryScore(plate, name) {
+    let s = jitter();
+    if (plate.lookalikes.includes(name)) s += 100;
+    const tg = ctags[name] || new Set();
+    plate.tags.forEach(t => { if (tg.has(t)) s += (t === 'eu-strip' ? 3 : 10); });
+    if (C[name] && C[name].c === plate.continent) s += 5;
+    return s;
+  }
+  function countryOptions(plate, restrictToContinent) {
+    const cands = COUNTRIES.map(c => c.n).filter(n => n !== plate.country && (!restrictToContinent || C[n].c === plate.continent));
+    const picked = cands.map(n => [n, countryScore(plate, n)]).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => x[0]);
+    return shuffle([plate.country, ...picked]);
+  }
+  function continentOptions(plate) {
+    const sc = {};
+    CONTINENTS.forEach(c => sc[c] = jitter());
+    plate.lookalikes.forEach(n => { if (C[n]) sc[C[n].c] += 4; });
+    COUNTRIES.forEach(c => plate.tags.forEach(t => { if (t !== 'eu-strip' && ctags[c.n].has(t)) sc[c.c] += 1; }));
+    const others = CONTINENTS.filter(c => c !== plate.continent).sort((a, b) => sc[b] - sc[a]).slice(0, 3);
+    return CONTINENTS.filter(c => c === plate.continent || others.includes(c)); // stable geographic order
+  }
+
+  // ---------- quiz ----------
+  let Q = null;
+  function start(list) {
+    let items = shuffle(list || pool());
+    const L = +S.length; if (!list && L) items = items.slice(0, L);
+    Q = { items, i: 0, contOk: 0, contAsked: 0, ok: 0, missed: [], answers: [] };
+    show('quiz'); nextPlate();
+  }
+  function updateTop() {
+    $('#progress').style.width = (Q.i / Q.items.length * 100) + '%';
+    let s = `<b>${Q.i + 1 > Q.items.length ? Q.items.length : Q.i + 1}</b>/${Q.items.length} · Country <b>${Q.ok}</b>`;
+    if (Q.contAsked) s += ` · Continent <b>${Q.contOk}</b>/${Q.contAsked}`;
+    $('#scoreline').innerHTML = s;
+  }
+  function nextPlate() {
+    if (Q.i >= Q.items.length) return summary();
+    const p = Q.items[Q.i];
+    Q.cur = { p, contRes: null };
+    $('#qimg').src = p.img;
+    updateTop();
+    if (S.mode === 'type') askType(p);
+    else if (S.contstep === 'on') askContinent(p);
+    else askCountry(p, false);
+  }
+  function optButtons(list, render) {
+    return `<div class="opts">${list.map((v, i) => `<button class="opt" data-v="${esc(v)}">${render(v)}<kbd>${i + 1}</kbd></button>`).join('')}</div>`;
+  }
+  function wireOpts(onPick) {
+    const btns = [...$('#qarea').querySelectorAll('.opt')];
+    btns.forEach(b => b.onclick = () => onPick(b.dataset.v, btns));
+    keyHandler = e => { const k = +e.key; if (k >= 1 && k <= btns.length && !btns[0].disabled) btns[k - 1].click(); };
+  }
+  function mark(btns, correct, picked) {
+    btns.forEach(b => { b.disabled = true; if (b.dataset.v === correct) b.classList.add('good'); else if (b.dataset.v === picked) b.classList.add('bad'); });
+  }
+  function askContinent(p) {
+    $('#qarea').innerHTML = `<div class="question"><span class="step">1/2</span> Which continent?</div>` + optButtons(continentOptions(p), v => esc(v));
+    wireOpts((v, btns) => {
+      mark(btns, p.continent, v);
+      Q.contAsked++; const ok = v === p.continent; if (ok) Q.contOk++;
+      Q.cur.contRes = ok; updateTop();
+      setTimeout(() => askCountry(p, true, ok), ok ? 350 : 900);
+    });
+  }
+  function askCountry(p, afterCont, contOk) {
+    const pre = afterCont ? `<div class="hint" style="margin-top:12px">${contOk ? '✓' : '✗'} Continent: <b style="color:var(--text)">${esc(p.continent)}</b></div>` : '';
+    $('#qarea').innerHTML = pre + `<div class="question">${afterCont ? '<span class="step">2/2</span>' : ''} Which country?</div>` +
+      optButtons(countryOptions(p, afterCont), v => flag(v) + esc(v));
+    wireOpts((v, btns) => { mark(btns, p.country, v); finish(p, v); });
+  }
+
+  // typing
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const NAMES = COUNTRIES.map(c => ({ n: c.n, c: c.c, keys: [c.n, ...(c.a || [])].map(norm) }));
+  function suggest(q) {
+    q = norm(q); if (!q) return [];
+    const r = [];
+    NAMES.forEach(x => {
+      let best = 99;
+      x.keys.forEach(k => {
+        if (k === q) best = Math.min(best, 0);
+        else if (k.startsWith(q)) best = Math.min(best, 1);
+        else if (k.split(' ').some(w => w.startsWith(q))) best = Math.min(best, 2);
+        else if (q.length > 2 && k.includes(q)) best = Math.min(best, 3);
+      });
+      if (best < 99) r.push([x, best]);
+    });
+    return r.sort((a, b) => a[1] - b[1] || a[0].n.localeCompare(b[0].n)).slice(0, 7).map(x => x[0]);
+  }
+  function askType(p) {
+    $('#qarea').innerHTML = `<div class="question">Which country?</div>
+      <div class="typebox"><input id="tin" autocomplete="off" spellcheck="false" placeholder="Start typing… (Enter to submit)"><div class="sugg hidden-el" id="sugg"></div></div>
+      <div class="hint" style="margin-top:8px">↑/↓ to pick a suggestion · Enter to submit · empty Enter = give up</div>`;
+    const tin = $('#tin'), sg = $('#sugg'); let list = [], sel = 0;
+    const draw = () => {
+      list = suggest(tin.value); sel = Math.min(sel, Math.max(0, list.length - 1));
+      sg.classList.toggle('hidden-el', !list.length);
+      sg.innerHTML = list.map((x, i) => `<div class="${i === sel ? 'on' : ''}" data-i="${i}">${flag(x.n)}${esc(x.n)}<small>${esc(x.c)}</small></div>`).join('');
+      sg.querySelectorAll('div').forEach(d => d.onmousedown = e => { e.preventDefault(); submit(list[+d.dataset.i].n); });
+    };
+    const submit = name => { tin.disabled = true; sg.classList.add('hidden-el'); finish(p, name || '(no answer)'); };
+    tin.oninput = () => { sel = 0; draw(); };
+    tin.onkeydown = e => {
+      if (e.key === 'ArrowDown') { sel = Math.min(sel + 1, list.length - 1); draw(); e.preventDefault(); }
+      else if (e.key === 'ArrowUp') { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); }
+      else if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); submit(list.length ? list[sel].n : ''); }
+    };
+    keyHandler = null;
+    setTimeout(() => tin.focus(), 30);
+  }
+
+  function finish(p, answer) {
+    const ok = answer === p.country;
+    if (ok) Q.ok++; else Q.missed.push({ p, answer });
+    Q.i++; updateTop();
+    const tags = [p.mustLearn ? '<span class="tag ml">★ Must learn</span>' : '', ...p.tags.map(t => `<span class="tag">${esc(TAG_LABELS[t] || t)}</span>`)].join('');
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    fb.innerHTML = `<div class="verdict ${ok ? 'good' : 'bad'}">${ok ? '✓ Correct' : '✗ ' + esc(answer)} ${ok ? '' : '<span style="color:var(--muted);font-weight:600">→</span>'} ${flag(p.country)}<span style="color:var(--text)">${esc(p.country)}</span><span class="step">${esc(p.continent)}</span></div>
+      <p>${esc(p.note)}</p><div class="tags">${tags}</div>`;
+    $('#qarea').appendChild(fb);
+    const nx = document.createElement('div');
+    nx.className = 'next';
+    nx.innerHTML = `<button class="btn" id="nextbtn">${Q.i >= Q.items.length ? 'See results' : 'Next'} →</button><span class="hint">Enter / Space</span>`;
+    $('#qarea').appendChild(nx);
+    const go = () => { keyHandler = null; nextPlate(); };
+    $('#nextbtn').onclick = go;
+    setTimeout(() => { keyHandler = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } }; }, 150);
+    nx.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  function summary() {
+    keyHandler = null;
+    const n = Q.items.length, pct = Math.round(Q.ok / n * 100);
+    const missed = Q.missed.map(({ p, answer }) => `<div class="card"><div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt=""></div>
+      <div class="body"><div class="name">${flag(p.country)}${esc(p.country)}</div><div class="yours">You said: ${esc(answer)}</div><div class="note">${esc(p.note)}</div></div></div>`).join('');
+    $('#summary').innerHTML = `<div class="panel"><h2>Round complete</h2>
+      <div class="stats"><div><div class="big">${pct}%</div><span>countries (${Q.ok}/${n})</span></div>
+      ${Q.contAsked ? `<div><div class="big">${Math.round(Q.contOk / Q.contAsked * 100)}%</div><span>continents (${Q.contOk}/${Q.contAsked})</span></div>` : ''}</div>
+      <div class="row"><button class="btn" id="again">New round</button>${Q.missed.length ? `<button class="btn ghost" id="retry">Retry the ${Q.missed.length} missed</button>` : ''}<button class="btn ghost" id="tosetup">Settings</button></div></div>
+      ${missed ? `<h3 style="margin-top:22px">Missed</h3><div class="grid">${missed}</div>` : ''}`;
+    show('summary');
+    $('#again').onclick = () => start();
+    $('#tosetup').onclick = () => show('setup');
+    if ($('#retry')) { const m = Q.missed.map(x => x.p); $('#retry').onclick = () => start(m); }
+    wireThumbs($('#summary'));
+  }
+
+  // ---------- study ----------
+  function initStudy() {
+    $('#s-cont').innerHTML = `<option value="">All continents</option>` + CONTINENTS.map(c => `<option>${c}</option>`).join('');
+    $('#s-cat').innerHTML = CATS.map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join('');
+    ['#s-search', '#s-cont', '#s-cat', '#s-hide'].forEach(id => $(id).addEventListener('input', renderStudy));
+  }
+  function renderStudy() {
+    const q = norm($('#s-search').value), ct = $('#s-cont').value, cat = $('#s-cat').value, hide = $('#s-hide').checked;
+    const list = PLATES.filter(p => (!ct || p.continent === ct) && inCat(p, cat) && (!q || norm(p.country + ' ' + p.note).includes(q)))
+      .sort((a, b) => CONTINENTS.indexOf(a.continent) - CONTINENTS.indexOf(b.continent) || a.country.localeCompare(b.country));
+    $('#s-count').textContent = `${list.length} plates`;
+    $('#s-grid').innerHTML = list.map(p => `<div class="card ${hide ? 'hidden' : ''}">
+      <div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt="" loading="lazy"></div>
+      <div class="body"><div class="cover">Click to reveal</div>
+        <div class="reveal"><div class="name">${flag(p.country)}${esc(p.country)} <span class="step">${esc(p.continent)}</span></div>
+        <div class="note" style="margin-top:6px">${esc(p.note)}</div>
+        <div class="tags">${p.mustLearn ? '<span class="tag ml">★ Must learn</span>' : ''}${p.tags.map(t => `<span class="tag">${esc(TAG_LABELS[t] || t)}</span>`).join('')}</div>
+        ${p.lookalikes.length ? `<div class="hint" style="margin-top:6px">Don't confuse with: ${p.lookalikes.map(esc).join(', ')}</div>` : ''}</div>
+      </div></div>`).join('');
+    $('#s-grid').querySelectorAll('.cover').forEach(c => c.onclick = () => c.closest('.card').classList.remove('hidden'));
+    wireThumbs($('#s-grid'));
+  }
+
+  // ---------- chrome ----------
+  function wireThumbs(root) { root.querySelectorAll('.thumb').forEach(t => t.onclick = () => openLb(t.dataset.img)); }
+  const openLb = src => { $('#lbimg').src = src; $('#lb').classList.add('on'); };
+  $('#lb').onclick = () => $('#lb').classList.remove('on');
+  $('#qimgwrap').onclick = () => openLb($('#qimg').src);
+
+  function show(which) {
+    ['setup', 'quiz', 'summary', 'study'].forEach(id => $('#' + id).classList.toggle('hidden-el', id !== which));
+    $('#tab-quiz').classList.toggle('on', which !== 'study');
+    $('#tab-study').classList.toggle('on', which === 'study');
+    if (which === 'setup') renderSetup();
+    if (which === 'study') renderStudy();
+    window.scrollTo(0, 0);
+  }
+  $('#tab-quiz').onclick = () => { if (Q && Q.i < Q.items.length && !$('#quiz').classList.contains('hidden-el')) return; show('setup'); };
+  $('#tab-study').onclick = () => { keyHandler = null; show('study'); };
+  $('#quit').onclick = () => { keyHandler = null; Q = null; show('setup'); };
+  $('#start').onclick = () => start();
+
+  let keyHandler = null;
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { $('#lb').classList.remove('on'); return; }
+    if (keyHandler && !$('#quiz').classList.contains('hidden-el')) keyHandler(e);
+  });
+
+  initStudy();
+  show('setup');
+})();
+</script>
+</body>
+</html>
