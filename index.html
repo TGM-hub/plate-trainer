@@ -68,6 +68,71 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 .sugg div.on,.sugg div:hover{background:var(--line)}
 .sugg small{color:var(--muted);margin-left:auto;font-size:12px}
 
+/* compare (wrong answer) */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.cmp figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;background:#0b0c10}
+.cmp figure.yours{border-color:var(--bad)} .cmp figure.right{border-color:var(--good)}
+.cmp .thumb{height:150px;display:flex;align-items:center;justify-content:center;cursor:zoom-in}
+.cmp .thumb img{max-width:100%;max-height:150px;object-fit:contain}
+.cmp .noimg{flex:1;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;color:var(--muted);font-size:13px;text-align:center}
+.cmp figcaption{padding:8px 10px;font-size:13px;display:flex;align-items:center;gap:8px;background:var(--panel);font-weight:600}
+.cmp figcaption small{color:var(--muted);font-weight:500;margin-left:auto}
+.simline{margin-top:10px;font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.simline b{color:var(--text)}
+.tag.same{color:var(--text)} .tag.only-a{border-color:rgba(255,93,108,.5)} .tag.only-b{border-color:rgba(62,207,142,.5)}
+.keydiff{margin-top:10px;padding:10px 12px;border-left:3px solid var(--accent);background:var(--panel);border-radius:0 8px 8px 0;font-size:14px}
+/* mix-ups */
+.mix{margin-bottom:18px}
+.mix .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px}
+.mix .pair{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:14px}
+.mix .pair .n{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:6px 12px;font-weight:700;cursor:pointer}
+.empty{color:var(--muted);padding:30px 10px;text-align:center}
+/* study views + front plates map */
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:14px}
+.seg button{background:none;border:0;padding:7px 14px;border-radius:8px;color:var(--muted);font-weight:600;cursor:pointer}
+.seg button.on{background:var(--panel2);color:var(--text)}
+.fmap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px;position:relative}
+.fmap svg{display:block;width:100%;height:auto}
+.fmap path{stroke:var(--bg);stroke-width:.6;cursor:pointer;transition:opacity .15s}
+.fmap path.k-both{fill:#4a6fd1} .fmap path.k-rear{fill:var(--accent)} .fmap path.k-mostly{fill:#9a7fe0}
+.fmap path.recent{stroke:#fff;stroke-width:1.4;stroke-dasharray:3 2}
+.fmap path.dim{opacity:.18} .fmap path.sel{stroke:#fff;stroke-width:2.2;stroke-dasharray:none}
+.fmap path:focus-visible{outline:none;stroke:#fff;stroke-width:2.2}
+.ftip{position:absolute;pointer-events:none;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:13px;white-space:nowrap;display:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.legend .chip{display:flex;align-items:center;gap:8px}
+.legend .chip.off{opacity:.45}
+.sw{width:14px;height:14px;border-radius:3px;flex:none}
+.sw.k-both{background:#4a6fd1} .sw.k-rear{background:var(--accent)} .sw.k-mostly{background:#9a7fe0}
+.sw.recent{background:none;border:1.5px dashed var(--text)}
+.finfo{margin-top:12px;min-height:58px}
+.finfo .name{font-weight:700;font-size:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.finfo p{margin:6px 0 0;color:#cfd3de}
+/* regional mode */
+.rmap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:8px;margin-top:10px}
+.rmap svg{display:block;width:100%;height:auto;max-height:58vh;margin:0 auto}
+.rmap path{outline:none}
+.rmap path{fill:#3a4157;stroke:var(--bg);stroke-width:.8;cursor:pointer}
+.rmap path:hover{fill:#55607d}
+.rmap path:focus-visible{outline:none;fill:#55607d;stroke:#fff;stroke-width:1.5}
+.rmap.done path{cursor:default} .rmap.done path:hover{fill:#3a4157}
+.rmap path.good,.rmap.done path.good{fill:var(--good)} .rmap path.bad,.rmap.done path.bad{fill:var(--bad)}
+.rmap path.nodata{fill:#2a2f3f}
+.rmap path.sel{stroke:#fff;stroke-width:2}
+img.blurred{filter:blur(3px)}
+.strip{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
+.strip .thumb{flex:none;height:64px;width:auto;background:#0b0c10;border-radius:6px;overflow:hidden;cursor:zoom-in;display:flex;align-items:center}
+.strip .thumb img{height:64px;width:auto;display:block}
+.rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:14px}
+.rcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;scroll-margin-top:80px}
+.rcard.hl{border-color:var(--accent)}
+.rcard h4{margin:0 0 6px;font-size:16px}
+.rcard .design{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.rcard .design:first-of-type{border-top:0;padding-top:0}
+.rcard .refs{display:flex;gap:6px;flex-wrap:wrap}
+.rcard .refs .thumb{background:#fff;border-radius:6px;cursor:zoom-in;display:flex}
+.rcard .refs img{max-height:72px;max-width:100%;display:block}
 /* summary */
 .big{font-size:40px;font-weight:800}
 .stats{display:flex;gap:28px;flex-wrap:wrap;margin:6px 0 18px}
@@ -93,7 +158,7 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 .lb.on{display:flex}
 .lb img{max-width:100%;max-height:100%;image-rendering:auto;min-width:min(90vw,800px);object-fit:contain}
 .hidden-el{display:none!important}
-@media (max-width:600px){ header{padding:10px 14px} .logo span{display:none} .opts{grid-template-columns:1fr 1fr} .opt kbd{display:none} }
+@media (max-width:600px){ .cmp .thumb,.cmp .noimg{height:110px;min-height:110px} .cmp .thumb img{max-height:110px} header{padding:10px 14px} .logo span{display:none} .opts{grid-template-columns:1fr 1fr} .opt kbd{display:none} }
 </style>
 </head>
 <body>
@@ -108,22 +173,20 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
   <!-- SETUP -->
   <section id="setup" class="panel">
     <h2>New round</h2>
+    <h3>Game</h3>
+    <div class="row" id="opt-game"></div>
+    <div id="country-opts">
     <h3>Answer mode</h3>
     <div class="row" id="opt-mode">
       <div class="chip" data-v="mcq">Multiple choice</div>
+      <div class="chip" data-v="duel">Duel (2 lookalikes)</div>
       <div class="chip" data-v="type">Type the country</div>
-    </div>
-    <div id="contstep-row">
-      <h3>Continent step</h3>
-      <div class="row" id="opt-contstep">
-        <div class="chip" data-v="on">Continent → Country</div>
-        <div class="chip" data-v="off">Country only</div>
-      </div>
     </div>
     <h3>Continents</h3>
     <div class="row" id="opt-continents"></div>
     <h3>Category</h3>
     <div class="row" id="opt-category"></div>
+    </div>
     <h3>Round length</h3>
     <div class="row" id="opt-length">
       <div class="chip" data-v="10">10</div>
@@ -152,20 +215,32 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 
   <!-- STUDY -->
   <section id="study" class="hidden-el">
+    <div class="seg" id="s-views"><button data-v="plates" class="on">Plates</button><button data-v="front">Front plates map</button></div>
+    <div id="s-front" class="hidden-el"></div>
+    <div id="s-region" class="hidden-el"></div>
+    <div id="s-plates">
     <div class="studybar">
+      <button class="pill hidden-el" id="s-pill" title="Show all countries"></button>
       <input id="s-search" placeholder="Search country or note…" style="min-width:200px">
       <select id="s-cont"></select>
       <select id="s-cat"></select>
       <label class="switch"><input type="checkbox" id="s-hide"> Hide answers (flashcards)</label>
       <span class="hint" id="s-count"></span>
     </div>
+    <div class="mix hidden-el" id="s-mix"></div>
     <div class="grid" id="s-grid"></div>
+    </div>
   </section>
 </main>
 <div class="lb" id="lb"><img id="lbimg" alt=""></div>
 
 <script src="data/countries.js"></script>
 <script src="data/plates.js"></script>
+<script src="data/pairs.js"></script>
+<script src="data/frontplates.js"></script>
+<script src="data/frontmap.js"></script>
+<script src="data/regions/mx.js"></script>
+<script src="data/regions/mx-map.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
@@ -188,25 +263,39 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
   const inCat = (p, cat) => cat === 'all' || (cat === 'ml' ? p.mustLearn : p.tags.includes(cat));
 
   // ---------- settings ----------
-  const DEF = { mode: 'mcq', contstep: 'on', continents: CONTINENTS.slice(), category: 'all', length: '20' };
+  const DEF = { game: 'countries', mode: 'mcq', continents: CONTINENTS.slice(), category: 'all', length: '20' };
   let S = DEF;
   try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('plateTrainer.settings') || '{}')); } catch (e) {}
+  if (!['mcq', 'duel', 'type'].includes(S.mode)) S.mode = 'mcq';
+  const RG = window.REGIONS || {}, RM = window.REGION_MAPS || {};
+  if (S.game !== 'countries' && !(RG[S.game] && RM[S.game])) S.game = 'countries';
   const save = () => { try { localStorage.setItem('plateTrainer.settings', JSON.stringify(S)); } catch (e) {} };
 
   function bindSingle(id, key) {
     const el = $(id);
     el.querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S[key] = ch.dataset.v; save(); renderSetup(); });
   }
-  bindSingle('#opt-mode', 'mode'); bindSingle('#opt-contstep', 'contstep'); bindSingle('#opt-length', 'length');
+  bindSingle('#opt-mode', 'mode'); bindSingle('#opt-length', 'length');
 
-  const pool = () => PLATES.filter(p => S.continents.includes(p.continent) && inCat(p, S.category));
+  // Regional rounds: one item per Street View crop; country = region name so summary/retry work unchanged
+  const regionName = (rk, code) => (RM[rk].units.find(u => u.code === code) || {}).name || code;
+  function regionItems(rk) {
+    const out = [];
+    Object.entries(RG[rk].units).forEach(([code, u]) => u.designs.forEach((d, di) => d.crops.forEach(c =>
+      out.push({ region: rk, code, design: di, img: c.img, blur: !!c.blur, country: regionName(rk, code), note: u.note || '', tags: [], lookalikes: [] }))));
+    return out;
+  }
+  const pool = () => S.game !== 'countries' ? regionItems(S.game) : PLATES.filter(p => S.continents.includes(p.continent) && inCat(p, S.category));
 
   function renderSetup() {
-    ['#opt-mode:mode', '#opt-contstep:contstep', '#opt-length:length'].forEach(x => {
+    $('#opt-game').innerHTML = [['countries', 'Countries', PLATES.length], ...Object.keys(RG).filter(k => RM[k]).map(k => [k, `${RG[k].name} ${RG[k].unit}s`, regionItems(k).length])]
+      .map(([k, l, n]) => `<div class="chip ${S.game === k ? 'on' : ''}" data-v="${k}">${esc(l)}<small>${n}</small></div>`).join('');
+    $('#opt-game').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.game = ch.dataset.v; save(); renderSetup(); });
+    $('#country-opts').classList.toggle('hidden-el', S.game !== 'countries');
+    ['#opt-mode:mode', '#opt-length:length'].forEach(x => {
       const [id, k] = x.split(':');
       $(id).querySelectorAll('.chip').forEach(ch => ch.classList.toggle('on', ch.dataset.v === S[k]));
     });
-    $('#contstep-row').classList.toggle('hidden-el', S.mode !== 'mcq');
     $('#opt-continents').innerHTML = CONTINENTS.map(c => {
       const n = PLATES.filter(p => p.continent === c).length;
       return `<div class="chip ${S.continents.includes(c) ? 'on' : ''}" data-v="${c}">${c}<small>${n}</small></div>`;
@@ -222,7 +311,7 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     }).join('');
     $('#opt-category').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.category = ch.dataset.v; save(); renderSetup(); });
     const n = pool().length;
-    $('#poolinfo').textContent = n ? `${n} plate${n > 1 ? 's' : ''} in pool` : 'No plates match these filters';
+    $('#poolinfo').textContent = n ? `${n} plate${n > 1 ? 's' : ''} in pool${S.game !== 'countries' ? ' · click the ' + RG[S.game].unit + ' on the map' : ''}` : 'No plates match these filters';
     $('#start').disabled = !n;
   }
 
@@ -236,43 +325,67 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     if (C[name] && C[name].c === plate.continent) s += 5;
     return s;
   }
-  function countryOptions(plate, restrictToContinent) {
-    const cands = COUNTRIES.map(c => c.n).filter(n => n !== plate.country && (!restrictToContinent || C[n].c === plate.continent));
+  function countryOptions(plate) {
+    const cands = COUNTRIES.map(c => c.n).filter(n => n !== plate.country);
     const picked = cands.map(n => [n, countryScore(plate, n)]).sort((a, b) => b[1] - a[1]).slice(0, 5).map(x => x[0]);
     return shuffle([plate.country, ...picked]);
   }
-  function continentOptions(plate) {
-    const sc = {};
-    CONTINENTS.forEach(c => sc[c] = jitter());
-    plate.lookalikes.forEach(n => { if (C[n]) sc[C[n].c] += 4; });
-    COUNTRIES.forEach(c => plate.tags.forEach(t => { if (t !== 'eu-strip' && ctags[c.n].has(t)) sc[c.c] += 1; }));
-    const others = CONTINENTS.filter(c => c !== plate.continent).sort((a, b) => sc[b] - sc[a]).slice(0, 3);
-    return CONTINENTS.filter(c => c === plate.continent || others.includes(c)); // stable geographic order
+  // Look similarity = Jaccard index of the two countries' look tags (null if either has none)
+  function similarity(a, b) {
+    const A = ctags[a] || new Set(), B = ctags[b] || new Set();
+    if (!A.size || !B.size) return null;
+    let inter = 0; A.forEach(t => { if (B.has(t)) inter++; });
+    return inter / (A.size + B.size - inter);
   }
-
+  // ---------- mix-ups (persisted confusion counts: "truth|answer" -> n) ----------
+  const MIX_KEY = 'plateTrainer.mixups';
+  let MIX = {};
+  try { MIX = JSON.parse(localStorage.getItem(MIX_KEY) || '{}'); } catch (e) {}
+  const saveMix = () => { try { localStorage.setItem(MIX_KEY, JSON.stringify(MIX)); } catch (e) {} };
+  function recordMix(truth, answer) { if (!C[answer] || truth === answer) return; const k = truth + '|' + answer; MIX[k] = (MIX[k] || 0) + 1; saveMix(); }
+  // Unordered pairs, most confused first: [{a, b, ab, ba, n}]
+  function mixPairs() {
+    const m = {};
+    Object.entries(MIX).forEach(([k, n]) => {
+      const [t, a] = k.split('|'); const [x, y] = [t, a].sort(); const key = x + '|' + y;
+      const o = m[key] ||= { a: x, b: y, ab: 0, ba: 0, n: 0 };
+      if (t === x) o.ab += n; else o.ba += n; o.n += n;
+    });
+    return Object.values(m).sort((p, q) => q.n - p.n || p.a.localeCompare(q.a));
+  }
+  const pairKey = (a, b) => [a, b].sort().join('|');
+  // Duel opponent: your own mix-ups first, then dataset lookalikes, then the hardest distractor
+  function duelOpponent(p, onlyMix) {
+    const mine = mixPairs().filter(x => x.a === p.country || x.b === p.country).map(x => x.a === p.country ? x.b : x.a);
+    if (onlyMix && mine.length) return mine[Math.random() * Math.min(mine.length, 3) | 0];
+    const look = p.lookalikes.filter(n => n !== p.country);
+    const pool = [...new Set([...mine.slice(0, 2), ...look.slice(0, 2)])];
+    if (pool.length) return pool[Math.random() * pool.length | 0];
+    return countryOptions(p).find(n => n !== p.country);
+  }
   // ---------- quiz ----------
   let Q = null;
-  function start(list) {
+  function start(list, opts = {}) {
     let items = shuffle(list || pool());
     const L = +S.length; if (!list && L) items = items.slice(0, L);
-    Q = { items, i: 0, contOk: 0, contAsked: 0, ok: 0, missed: [], answers: [] };
+    const region = opts.region || (list ? null : (S.game !== 'countries' ? S.game : null)) || (items[0] && items[0].region) || null;
+    Q = { items, i: 0, ok: 0, missed: [], region, duel: !region && (opts.duel || S.mode === 'duel'), onlyMix: !!opts.onlyMix, label: opts.label || (region ? RG[region].name : '') };
     show('quiz'); nextPlate();
   }
   function updateTop() {
     $('#progress').style.width = (Q.i / Q.items.length * 100) + '%';
-    let s = `<b>${Q.i + 1 > Q.items.length ? Q.items.length : Q.i + 1}</b>/${Q.items.length} · Country <b>${Q.ok}</b>`;
-    if (Q.contAsked) s += ` · Continent <b>${Q.contOk}</b>/${Q.contAsked}`;
-    $('#scoreline').innerHTML = s;
+    $('#scoreline').innerHTML = `${Q.label ? esc(Q.label) + ' · ' : ''}<b>${Math.min(Q.i + 1, Q.items.length)}</b>/${Q.items.length} · Correct <b>${Q.ok}</b>`;
   }
   function nextPlate() {
     if (Q.i >= Q.items.length) return summary();
     const p = Q.items[Q.i];
-    Q.cur = { p, contRes: null };
     $('#qimg').src = p.img;
+    $('#qimg').classList.toggle('blurred', !!p.blur);
     updateTop();
-    if (S.mode === 'type') askType(p);
-    else if (S.contstep === 'on') askContinent(p);
-    else askCountry(p, false);
+    if (Q.region) askRegion(p);
+    else if (Q.duel) askCountry(p, shuffle([p.country, duelOpponent(p, Q.onlyMix)]), 'Which of the two?');
+    else if (S.mode === 'type') askType(p);
+    else askCountry(p, countryOptions(p), 'Which country?');
   }
   function optButtons(list, render) {
     return `<div class="opts">${list.map((v, i) => `<button class="opt" data-v="${esc(v)}">${render(v)}<kbd>${i + 1}</kbd></button>`).join('')}</div>`;
@@ -285,20 +398,52 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
   function mark(btns, correct, picked) {
     btns.forEach(b => { b.disabled = true; if (b.dataset.v === correct) b.classList.add('good'); else if (b.dataset.v === picked) b.classList.add('bad'); });
   }
-  function askContinent(p) {
-    $('#qarea').innerHTML = `<div class="question"><span class="step">1/2</span> Which continent?</div>` + optButtons(continentOptions(p), v => esc(v));
-    wireOpts((v, btns) => {
-      mark(btns, p.continent, v);
-      Q.contAsked++; const ok = v === p.continent; if (ok) Q.contOk++;
-      Q.cur.contRes = ok; updateTop();
-      setTimeout(() => askCountry(p, true, ok), ok ? 350 : 900);
-    });
-  }
-  function askCountry(p, afterCont, contOk) {
-    const pre = afterCont ? `<div class="hint" style="margin-top:12px">${contOk ? '✓' : '✗'} Continent: <b style="color:var(--text)">${esc(p.continent)}</b></div>` : '';
-    $('#qarea').innerHTML = pre + `<div class="question">${afterCont ? '<span class="step">2/2</span>' : ''} Which country?</div>` +
-      optButtons(countryOptions(p, afterCont), v => flag(v) + esc(v));
+  function askCountry(p, options, question) {
+    $('#qarea').innerHTML = `<div class="question">${question}</div>` + optButtons(options, v => flag(v) + esc(v));
     wireOpts((v, btns) => { mark(btns, p.country, v); finish(p, v); });
+  }
+  // regional: click the region on the map
+  function regionSvg(rk, cls) {
+    const M = RM[rk], units = M.units.slice().sort((a, b) => b.area - a.area);
+    return `<div class="rmap ${cls || ''}"><svg viewBox="0 0 ${M.w} ${M.h}" role="group" aria-label="Map of ${esc(RG[rk].name)}">${units.map(u =>
+      `<path d="${u.d}" data-c="${u.code}" tabindex="0" class="${RG[rk].units[u.code] && RG[rk].units[u.code].designs.length ? '' : 'nodata'}"><title>${esc(u.name)}</title></path>`).join('')}</svg></div>`;
+  }
+  function askRegion(p) {
+    const R = RG[p.region];
+    $('#qarea').innerHTML = `<div class="question">Which ${R.unit}?</div>` + regionSvg(p.region);
+    const map = $('#qarea .rmap');
+    map.querySelectorAll('path').forEach(pth => {
+      const pick = () => {
+        if (map.classList.contains('done')) return;
+        map.classList.add('done');
+        const code = pth.dataset.c;
+        map.querySelector(`path[data-c="${p.code}"]`).classList.add('good');
+        if (code !== p.code) pth.classList.add('bad');
+        finish(p, regionName(p.region, code));
+      };
+      pth.onclick = pick;
+      pth.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
+    });
+    keyHandler = null;
+  }
+  const thumbImg = (src, blur) => `<div class="thumb" data-img="${esc(src)}"><img src="${esc(src)}" alt="" loading="lazy"${blur ? ' class="blurred"' : ''}></div>`;
+  // Feedback for a regional answer: the design of the region you clicked vs the design shown
+  function regionCompareHtml(p, answer) {
+    const R = RG[p.region], M = RM[p.region];
+    const right = R.units[p.code].designs[p.design];
+    const others = right.crops.filter(c => c.img !== p.img);
+    const pickedCode = (M.units.find(u => u.name === answer) || {}).code;
+    const pu = pickedCode && R.units[pickedCode];
+    const fig = (refs, label, cls, empty) => `<figure class="${cls}">${refs.length ? `<div class="thumb" data-img="${esc(refs[0])}" style="background:#fff"><img src="${esc(refs[0])}" alt=""></div>` : `<div class="noimg">${empty}</div>`}<figcaption>${esc(label)}<small>${cls === 'right' ? 'correct' : 'your answer'}${refs.length > 1 ? ' · 1 of ' + refs.length : ''}</small></figcaption></figure>`;
+    let html = '';
+    if (answer !== p.country) {
+      const prefs = pu ? pu.designs.flatMap(d => d.refs) : [];
+      html += `<div class="cmp">${fig(prefs, answer, 'yours', `No plate for ${esc(answer)} in the data yet`)}${fig(right.refs, p.country, 'right', '')}</div>`;
+    } else if (right.refs.length) {
+      html += `<div class="strip">${right.refs.map(r => thumbImg(r)).join('')}</div>`;
+    }
+    if (others.length) html += `<div class="simline">Same design on Street View:</div><div class="strip">${others.map(c => thumbImg(c.img, c.blur)).join('')}</div>`;
+    return html;
   }
 
   // typing
@@ -343,14 +488,16 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 
   function finish(p, answer) {
     const ok = answer === p.country;
-    if (ok) Q.ok++; else Q.missed.push({ p, answer });
+    if (ok) Q.ok++; else { Q.missed.push({ p, answer }); recordMix(p.country, answer); }
     Q.i++; updateTop();
     const tags = [p.mustLearn ? '<span class="tag ml">★ Must learn</span>' : '', ...p.tags.map(t => `<span class="tag">${esc(TAG_LABELS[t] || t)}</span>`)].join('');
     const fb = document.createElement('div');
     fb.className = 'feedback';
-    fb.innerHTML = `<div class="verdict ${ok ? 'good' : 'bad'}">${ok ? '✓ Correct' : '✗ ' + esc(answer)} ${ok ? '' : '<span style="color:var(--muted);font-weight:600">→</span>'} ${flag(p.country)}<span style="color:var(--text)">${esc(p.country)}</span><span class="step">${esc(p.continent)}</span></div>
+    fb.innerHTML = `<div class="verdict ${ok ? 'good' : 'bad'}">${ok ? '✓ Correct' : '✗ ' + esc(answer)} ${ok ? '' : '<span style="color:var(--muted);font-weight:600">→</span>'} ${flag(p.country)}<span style="color:var(--text)">${esc(p.country)}</span></div>
+      ${p.region ? regionCompareHtml(p, answer) : (!ok && C[answer] ? compareHtml(p, answer) : '')}
       <p>${esc(p.note)}</p><div class="tags">${tags}</div>`;
     $('#qarea').appendChild(fb);
+    wireThumbs(fb);
     const nx = document.createElement('div');
     nx.className = 'next';
     nx.innerHTML = `<button class="btn" id="nextbtn">${Q.i >= Q.items.length ? 'See results' : 'Next'} →</button><span class="hint">Enter / Space</span>`;
@@ -361,20 +508,43 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     nx.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
+  // Side-by-side: the plate of the country you picked vs the plate shown
+  function compareHtml(p, answer) {
+    const theirs = PLATES.filter(x => x.country === answer);
+    const ref = theirs.find(x => x.lookalikes.includes(p.country)) || theirs[0];
+    const tagsOf = n => [...(ctags[n] || [])];
+    const tagChips = (list, cls) => list.map(t => `<span class="tag ${cls}">${esc(TAG_LABELS[t] || t)}</span>`).join('');
+    const yours = ref
+      ? `<div class="thumb" data-img="${esc(ref.img)}"><img src="${esc(ref.img)}" alt=""></div>`
+      : `<div class="noimg">No ${esc(answer)} plate in the dataset yet<div class="tags" style="justify-content:center">${tagChips(tagsOf(answer), '') || 'No look tags either'}</div></div>`;
+    const sim = similarity(p.country, answer);
+    const A = ctags[answer] || new Set(), B = ctags[p.country] || new Set();
+    const same = [...B].filter(t => A.has(t)), onlyA = [...A].filter(t => !B.has(t)), onlyB = [...B].filter(t => !A.has(t));
+    const note = (window.PAIR_NOTES || {})[pairKey(p.country, answer)];
+    let simTxt = '';
+    if (sim !== null) {
+      simTxt = `<div class="simline">Look similarity <b>${Math.round(sim * 100)}%</b>${tagChips(same, 'same')}${tagChips(onlyA, 'only-a')}${tagChips(onlyB, 'only-b')}</div>`;
+      if (sim >= 0.99 && !note) simTxt += `<div class="simline">Same look tags: the difference is in the details, compare the two plates above.</div>`;
+    }
+    return `<div class="cmp">
+        <figure class="yours">${yours}<figcaption>${flag(answer)}${esc(answer)}<small>your answer${theirs.length > 1 ? ` · 1 of ${theirs.length}` : ''}</small></figcaption></figure>
+        <figure class="right"><div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt=""></div><figcaption>${flag(p.country)}${esc(p.country)}<small>correct</small></figcaption></figure>
+      </div>${simTxt}${note ? `<div class="keydiff">${esc(note)}</div>` : ''}`;
+  }
+
   function summary() {
     keyHandler = null;
     const n = Q.items.length, pct = Math.round(Q.ok / n * 100);
-    const missed = Q.missed.map(({ p, answer }) => `<div class="card"><div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt=""></div>
-      <div class="body"><div class="name">${flag(p.country)}${esc(p.country)}</div><div class="yours">You said: ${esc(answer)}</div><div class="note">${esc(p.note)}</div></div></div>`).join('');
+    const missed = Q.missed.map(({ p, answer }) => `<div class="card"><div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt=""${p.blur ? ' class="blurred"' : ''}></div>
+      <div class="body"><div class="name">${flag(p.country)}${esc(p.country)}</div><div class="yours">You said: ${flag(answer)}${esc(answer)}</div><div class="note">${esc(p.note)}</div></div></div>`).join('');
     $('#summary').innerHTML = `<div class="panel"><h2>Round complete</h2>
-      <div class="stats"><div><div class="big">${pct}%</div><span>countries (${Q.ok}/${n})</span></div>
-      ${Q.contAsked ? `<div><div class="big">${Math.round(Q.contOk / Q.contAsked * 100)}%</div><span>continents (${Q.contOk}/${Q.contAsked})</span></div>` : ''}</div>
+      <div class="stats"><div><div class="big">${pct}%</div><span>correct (${Q.ok}/${n})</span></div></div>
       <div class="row"><button class="btn" id="again">New round</button>${Q.missed.length ? `<button class="btn ghost" id="retry">Retry the ${Q.missed.length} missed</button>` : ''}<button class="btn ghost" id="tosetup">Settings</button></div></div>
       ${missed ? `<h3 style="margin-top:22px">Missed</h3><div class="grid">${missed}</div>` : ''}`;
     show('summary');
-    $('#again').onclick = () => start();
+    $('#again').onclick = () => Q.onlyMix ? drillMix() : start();
     $('#tosetup').onclick = () => show('setup');
-    if ($('#retry')) { const m = Q.missed.map(x => x.p); $('#retry').onclick = () => start(m); }
+    if ($('#retry')) { const m = Q.missed.map(x => x.p), d = Q.duel, om = Q.onlyMix, lb = Q.label, rg = Q.region; $('#retry').onclick = () => start(m, { duel: d, onlyMix: om, label: lb, region: rg }); }
     wireThumbs($('#summary'));
   }
 
@@ -383,12 +553,37 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     $('#s-cont').innerHTML = `<option value="">All continents</option>` + CONTINENTS.map(c => `<option>${c}</option>`).join('');
     $('#s-cat').innerHTML = CATS.map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join('');
     ['#s-search', '#s-cont', '#s-cat', '#s-hide'].forEach(id => $(id).addEventListener('input', renderStudy));
+    $('#s-pill').onclick = () => { SC = null; if (location.hash) history.replaceState(null, '', location.pathname + location.search); renderStudy(); };
+  }
+  let SC = null; // country opened through #iso
+  function drillMix() {
+    const names = new Set(); mixPairs().forEach(x => { names.add(x.a); names.add(x.b); });
+    const list = PLATES.filter(p => names.has(p.country));
+    if (list.length) start(list, { duel: true, onlyMix: true, label: 'Mix-ups' });
+  }
+  function renderMix() {
+    const box = $('#s-mix'), pairs = mixPairs();
+    const drillable = pairs.some(x => PLATES.some(p => p.country === x.a || p.country === x.b));
+    box.classList.toggle('hidden-el', !pairs.length || !!SC);
+    if (!pairs.length || SC) return;
+    const arrow = (n, from, to) => n ? `<span title="${esc(from)} plate, you said ${esc(to)}">${n}×</span>` : '';
+    box.innerHTML = `<h3 style="margin-top:0">Your mix-ups</h3><div class="list">${pairs.slice(0, 12).map(x => {
+      const sim = similarity(x.a, x.b);
+      return `<div class="pair">${flag(x.a)}${esc(x.a)} <span style="color:var(--muted)">/</span> ${flag(x.b)}${esc(x.b)}<span class="n">${x.n}×${sim !== null ? ` · ${Math.round(sim * 100)}% alike` : ''}</span></div>`;
+    }).join('')}</div>
+      <div class="row" style="margin-top:10px">${drillable ? '<button class="btn" id="mix-drill">Drill my mix-ups</button>' : ''}<button class="btn ghost" id="mix-reset">Reset</button></div>`;
+    if ($('#mix-drill')) $('#mix-drill').onclick = drillMix;
+    $('#mix-reset').onclick = () => { if (confirm('Forget all recorded mix-ups?')) { MIX = {}; saveMix(); renderMix(); } };
   }
   function renderStudy() {
     const q = norm($('#s-search').value), ct = $('#s-cont').value, cat = $('#s-cat').value, hide = $('#s-hide').checked;
-    const list = PLATES.filter(p => (!ct || p.continent === ct) && inCat(p, cat) && (!q || norm(p.country + ' ' + p.note).includes(q)))
+    const pill = $('#s-pill');
+    pill.classList.toggle('hidden-el', !SC);
+    if (SC) pill.innerHTML = `${flag(SC)}${esc(SC)} ✕`;
+    renderMix();
+    const list = PLATES.filter(p => (!SC || p.country === SC) && (!ct || p.continent === ct) && inCat(p, cat) && (!q || norm(p.country + ' ' + p.note).includes(q)))
       .sort((a, b) => CONTINENTS.indexOf(a.continent) - CONTINENTS.indexOf(b.continent) || a.country.localeCompare(b.country));
-    $('#s-count').textContent = `${list.length} plates`;
+    $('#s-count').textContent = `${list.length} plate${list.length === 1 ? '' : 's'}`;
     $('#s-grid').innerHTML = list.map(p => `<div class="card ${hide ? 'hidden' : ''}">
       <div class="thumb" data-img="${esc(p.img)}"><img src="${esc(p.img)}" alt="" loading="lazy"></div>
       <div class="body"><div class="cover">Click to reveal</div>
@@ -396,9 +591,77 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
         <div class="note" style="margin-top:6px">${esc(p.note)}</div>
         <div class="tags">${p.mustLearn ? '<span class="tag ml">★ Must learn</span>' : ''}${p.tags.map(t => `<span class="tag">${esc(TAG_LABELS[t] || t)}</span>`).join('')}</div>
         ${p.lookalikes.length ? `<div class="hint" style="margin-top:6px">Don't confuse with: ${p.lookalikes.map(esc).join(', ')}</div>` : ''}</div>
-      </div></div>`).join('');
+      </div></div>`).join('') || `<div class="empty">${SC && !PLATES.some(p => p.country === SC) ? `No ${esc(SC)} plate in the dataset yet.` : 'No plate matches these filters.'}</div>`;
     $('#s-grid').querySelectorAll('.cover').forEach(c => c.onclick = () => c.closest('.card').classList.remove('hidden'));
     wireThumbs($('#s-grid'));
+  }
+
+  // ---------- front plates map ----------
+  const KINDS = [['rear', 'Rear plate only'], ['both', 'Front and rear'], ['mostly', 'Front and rear, often missing']];
+  const FR = {};   // "US-OH" -> {k, since, note}
+  Object.entries(FRONT_RULES).forEach(([cc, byK]) => Object.entries(byK).forEach(([k, list]) => list.forEach(u => {
+    FR[cc + '-' + u] = Object.assign({ k }, FRONT_NOTES[cc + '-' + u] || {});
+  })));
+  const RECENT_FROM = 2019;
+  let SV = 'plates', FSEL = null, FOFF = new Set();
+  const COUNTRY_OF = code => ({ US: 'United States', CA: 'Canada', MX: 'Mexico' })[code.slice(0, 2)];
+  function setView(v) {
+    SV = v;
+    $('#s-views').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+    $('#s-plates').classList.toggle('hidden-el', v !== 'plates');
+    $('#s-front').classList.toggle('hidden-el', v !== 'front');
+    $('#s-region').classList.toggle('hidden-el', !v.startsWith('r:'));
+    if (v === 'front') renderFront(); else if (v.startsWith('r:')) renderRegion(v.slice(2)); else renderStudy();
+  }
+  Object.keys(RG).filter(k => RM[k]).forEach(k => $('#s-views').insertAdjacentHTML('beforeend', `<button data-v="r:${k}">${esc(RG[k].name)} ${esc(RG[k].unit)}s</button>`));
+  $('#s-views').querySelectorAll('button').forEach(b => b.onclick = () => setView(b.dataset.v));
+  function renderFront() {
+    const M = FRONT_MAP, box = $('#s-front');
+    const missing = M.units.filter(u => !FR[u.code]).map(u => u.code);
+    if (missing.length) console.warn('No front-plate rule for', missing);
+    const count = k => M.units.filter(u => FR[u.code] && FR[u.code].k === k).length;
+    const recent = M.units.filter(u => FR[u.code] && FR[u.code].since >= RECENT_FROM).length;
+    // small units last so they stay clickable on top
+    const units = M.units.slice().sort((a, b) => b.area - a.area);
+    box.innerHTML = `<div class="legend">${KINDS.map(([k, l]) => `<div class="chip ${FOFF.has(k) ? 'off' : ''}" data-k="${k}" title="Show / hide"><span class="sw k-${k}"></span>${l}<small>${count(k)}</small></div>`).join('')}
+        <div class="chip ${FOFF.has('recent') ? 'off' : ''}" data-k="recent" title="Show / hide the outline"><span class="sw recent"></span>Changed since ${RECENT_FROM}<small>${recent}</small></div></div>
+      <div class="fmap"><svg viewBox="0 0 ${M.w} ${M.h}" role="img" aria-label="Front plate rules in the United States, Canada and Mexico">
+        ${units.map(u => { const r = FR[u.code] || {}; const rec = r.since >= RECENT_FROM && !FOFF.has('recent');
+          return `<path d="${u.d}" data-c="${u.code}" tabindex="0" class="k-${r.k || 'none'}${rec ? ' recent' : ''}${FOFF.has(r.k) ? ' dim' : ''}${FSEL === u.code ? ' sel' : ''}"><title>${esc(u.name)}</title></path>`; }).join('')}
+      </svg><div class="ftip" id="ftip"></div></div>
+      <div class="finfo panel" id="finfo"></div>
+      <p class="hint">Rules for passenger cars. Street View often predates a change, so check the coverage year against the dashed units. Sources: Wikipedia articles on US, Canadian and Mexican plates (read October 2026).</p>`;
+    box.querySelectorAll('.legend .chip').forEach(ch => ch.onclick = () => { const k = ch.dataset.k; FOFF.has(k) ? FOFF.delete(k) : FOFF.add(k); renderFront(); });
+    const tip = $('#ftip'), wrap = box.querySelector('.fmap');
+    box.querySelectorAll('path').forEach(pth => {
+      const u = M.units.find(x => x.code === pth.dataset.c);
+      pth.onmousemove = e => { const r = wrap.getBoundingClientRect(); tip.style.display = 'block'; tip.textContent = u.name;
+        tip.style.left = Math.min(e.clientX - r.left + 12, r.width - tip.offsetWidth - 4) + 'px'; tip.style.top = (e.clientY - r.top + 14) + 'px'; };
+      pth.onmouseleave = () => tip.style.display = 'none';
+      const pick = () => { FSEL = u.code; box.querySelectorAll('path.sel').forEach(x => x.classList.remove('sel')); pth.classList.add('sel'); showFront(u); };
+      pth.onclick = pick;
+      pth.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
+    });
+    const cur = FSEL && M.units.find(u => u.code === FSEL);
+    if (cur) showFront(cur); else $('#finfo').innerHTML = `<div class="hint">Click a state or province for details. No front plate on the car? The yellow units are your candidates, plus the purple ones where it is often missing.</div>`;
+  }
+  function renderRegion(rk) {
+    const R = RG[rk], M = RM[rk], box = $('#s-region');
+    const units = M.units.slice().sort((a, b) => a.name.localeCompare(b.name));
+    box.innerHTML = `<p class="hint" style="margin-top:0">Click a ${esc(R.unit)} to jump to its plates. White: reference plate. Dark: the same design on Street View.</p>` + regionSvg(rk) +
+      `<div class="rcards">${units.map(u => { const d = R.units[u.code] || { designs: [] };
+        return `<div class="rcard" id="rc-${u.code}"><h4>${esc(u.name)}</h4>${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}${d.designs.map(g =>
+          `<div class="design"><div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
+      <p class="hint">${esc(R.credit || '')}</p>`;
+    box.querySelectorAll('.rmap path').forEach(pth => pth.onclick = () => {
+      box.querySelectorAll('.rmap path.sel, .rcard.hl').forEach(x => x.classList.remove('sel', 'hl'));
+      pth.classList.add('sel'); const c = $('#rc-' + pth.dataset.c); c.classList.add('hl'); c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    wireThumbs(box);
+  }
+  function showFront(u) {
+    const r = FR[u.code] || {}, label = (KINDS.find(x => x[0] === r.k) || [, 'No data'])[1];
+    $('#finfo').innerHTML = `<div class="name">${esc(u.name)} <span class="step">${COUNTRY_OF(u.code)}</span><span class="tag" style="display:inline-flex;align-items:center;gap:6px"><span class="sw k-${r.k}"></span>${label}</span>${r.since ? `<span class="tag">changed ${r.since}</span>` : ''}</div>${r.note ? `<p>${esc(r.note)}</p>` : ''}`;
   }
 
   // ---------- chrome ----------
@@ -412,7 +675,7 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     $('#tab-quiz').classList.toggle('on', which !== 'study');
     $('#tab-study').classList.toggle('on', which === 'study');
     if (which === 'setup') renderSetup();
-    if (which === 'study') renderStudy();
+    if (which === 'study') { if (SV === 'front') renderFront(); else if (SV.startsWith('r:')) renderRegion(SV.slice(2)); else renderStudy(); }
     window.scrollTo(0, 0);
   }
   $('#tab-quiz').onclick = () => { if (Q && Q.i < Q.items.length && !$('#quiz').classList.contains('hidden-el')) return; show('setup'); };
@@ -426,8 +689,21 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
     if (keyHandler && !$('#quiz').classList.contains('hidden-el')) keyHandler(e);
   });
 
+  // Deep link: #fr opens Study filtered on that country (ISO 3166-1 alpha-2, as used by Atlas)
+  const ISO = {}; COUNTRIES.forEach(c => ISO[c.f.toLowerCase()] = c.n);
+  function applyHash() {
+    const h = location.hash.slice(1).toLowerCase();
+    if (h === 'front') { keyHandler = null; Q = null; show('study'); setView('front'); return true; }
+    if (RG[h] && RM[h]) { keyHandler = null; Q = null; show('study'); setView('r:' + h); return true; }
+    const n = ISO[h];
+    if (!n) return false;
+    if (SV !== 'plates') setView('plates');
+    SC = n; $('#s-search').value = ''; $('#s-cont').value = ''; $('#s-cat').value = 'all';
+    keyHandler = null; Q = null; show('study'); return true;
+  }
+  window.addEventListener('hashchange', applyHash);
   initStudy();
-  show('setup');
+  if (!applyHash()) show('setup');
 })();
 </script>
 </body>
