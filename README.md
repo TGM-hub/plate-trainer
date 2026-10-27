@@ -37,7 +37,7 @@ clicked vs the right one, plus other crops of the same design.
 - Data: `data/regions/mx.js` (`units[CODE].designs = [{refs, crops: [{img, blur?}]}]`, CODE = ISO 3166-2 suffix).
   `blur: 1` marks crops sharp enough to read; the app blurs them. Images in `images/mx/`.
 - Sources: Plonk It, "Applicably Guessable Mexico Plates Documentation" (used with permission), and @bagaboiebailey,
-  "Useful Mexico License Plates 2025 Update" (designs from 2019 on, `recent: 1`; the setup offers "Recent coverage only"). Mexico City and Nuevo León have no plate yet.
+  "Useful Mexico License Plates 2025 Update" (designs from 2019 on, `recent: 1`; the setup offers "Recent coverage only"). Difficulty levels (`level`), Mexico City and Nuevo León from the Plonk It chart by Angelo and Linus Sköldberg; US difficulty levels and the 23 states LearnableMeta lacks from the Plonk It chart by Keaton. The quiz setup filters by difficulty; the explorer can colour the map by it. Mexico City and Nuevo León have no plate yet.
 - US: `data/regions/us.js`, images in `images/us/`, from the LearnableMeta meta list "A Learnable USA – License Plates"
   (28 states). Its blurred plates are simulated from the reference plate, not real Street View crops.
 - Canada: `data/regions/ca.js`, images in `images/ca/`, cut from a Canada plate guide (11 provinces and territories;

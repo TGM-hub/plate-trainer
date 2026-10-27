@@ -89,8 +89,8 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 .pill{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:6px 12px;font-weight:700;cursor:pointer}
 .empty{color:var(--muted);padding:30px 10px;text-align:center}
 /* study views + front plates map */
-.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:14px}
-.seg button{background:none;border:0;padding:7px 14px;border-radius:8px;color:var(--muted);font-weight:600;cursor:pointer}
+.seg{max-width:100%;overflow-x:auto;display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px;margin-bottom:14px}
+.seg button{white-space:nowrap;background:none;border:0;padding:7px 14px;border-radius:8px;color:var(--muted);font-weight:600;cursor:pointer}
 .seg button.on{background:var(--panel2);color:var(--text)}
 .fmap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:10px;position:relative}
 .fmap svg{display:block;width:100%;height:auto}
@@ -151,6 +151,40 @@ img.blurred{filter:blur(3px)}
 .rcard .refs{display:flex;gap:6px;flex-wrap:wrap}
 .rcard .refs .thumb{background:#fff;border-radius:6px;cursor:zoom-in;display:flex}
 .rcard .refs img{max-height:72px;max-width:100%;display:block}
+/* regional explorer: map and selected unit side by side */
+main.wide{max-width:1480px}
+.rx{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(330px,1fr);gap:16px;align-items:start}
+.rx .rleft{position:sticky;top:72px}
+.rx .rleft .rmap{margin-top:0}
+.rx .rleft .rmap svg{max-height:calc(100vh - 170px)}
+.rpanel{position:sticky;top:72px;max-height:calc(100vh - 88px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.rpanel .rhead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.rpanel .rhead h4{margin:0;font-size:20px;flex:1}
+.rpanel .rhead select{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:160px}
+.rpanel .nav{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:16px}
+.rpanel .nav:hover{border-color:var(--accent)}
+.rpanel .design{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.rpanel .refs{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.rpanel .refs .thumb{background:#fff;border-radius:6px;cursor:zoom-in;display:flex}
+.rpanel .refs img{max-height:110px;max-width:100%;display:block}
+.rpanel .strip .thumb,.rpanel .strip .thumb img{height:90px}
+.rpanel .empty{padding:20px 0}
+.rkeys{color:var(--muted);font-size:12px;margin-top:8px}
+@media (max-width:900px){
+  .rx{grid-template-columns:1fr}
+  .rx .rleft{top:58px;z-index:3;background:var(--bg);padding-bottom:6px}
+  .rx .rleft .rmap svg{max-height:34vh}
+  .rx .rleft .rbar{margin-top:4px;min-height:0}
+  .rx .rleft .rbar .hint,.rkeys{display:none}
+  .rx .rleft .rbar .toggle{padding:5px 10px;font-size:13px}
+  .rpanel .rhead h4{display:none}
+  .rpanel .rhead select{max-width:none;flex:1}
+  .rpanel{position:static;max-height:none}
+}
+.rmap.bylevel .units path.lv-easy{fill:#2f8f68} .rmap.bylevel .units path.lv-medium{fill:#a8862c} .rmap.bylevel .units path.lv-hard{fill:#a2424a}
+.rmap.bylevel .units path.hover{filter:brightness(1.25)}
+.lvtag{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff}
+.lvtag.lv-easy{background:#2f8f68} .lvtag.lv-medium{background:#a8862c} .lvtag.lv-hard{background:#a2424a}
 /* summary */
 .big{font-size:40px;font-weight:800}
 .stats{display:flex;gap:28px;flex-wrap:wrap;margin:6px 0 18px}
@@ -206,8 +240,9 @@ img.blurred{filter:blur(3px)}
     <div class="row" id="opt-category"></div>
     </div>
     <div id="region-opts" class="hidden-el">
-      <h3>Plates</h3>
-      <div class="row" id="opt-recent"><div class="chip" data-v="all">All designs</div><div class="chip" data-v="recent">Recent coverage only (2019+)</div></div>
+      <div id="recent-row"><h3>Plates</h3>
+      <div class="row" id="opt-recent"><div class="chip" data-v="all">All designs</div><div class="chip" data-v="recent">Recent coverage only (2019+)</div></div></div>
+      <div id="level-row"><h3>Difficulty</h3><div class="row" id="opt-level"></div></div>
     </div>
     <h3>Round length</h3>
     <div class="row" id="opt-length">
@@ -308,7 +343,8 @@ img.blurred{filter:blur(3px)}
   function regionItems(rk) {
     const out = [];
     const recentOnly = S.recentOnly && Object.values(RG[rk].units).some(u => u.designs.some(d => d.recent));
-    Object.entries(RG[rk].units).forEach(([code, u]) => u.designs.forEach((d, di) => (recentOnly && !d.recent ? [] : d.crops).forEach(c =>
+    const lv = RG[rk].levels && (S.levelsBy || {})[rk] ? new Set(S.levelsBy[rk]) : null;
+    Object.entries(RG[rk].units).forEach(([code, u]) => (lv && u.level && !lv.has(u.level) ? [] : u.designs).forEach((d, di) => (recentOnly && !d.recent ? [] : d.crops).forEach(c =>
       out.push({ region: rk, code, design: di, img: c.img, blur: !!c.blur, vehicle: c.vehicle || d.vehicle || null, country: regionName(rk, code), note: u.note || '', tags: [], lookalikes: [] }))));
     return out;
   }
@@ -320,7 +356,18 @@ img.blurred{filter:blur(3px)}
     $('#opt-game').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.game = ch.dataset.v; save(); renderSetup(); });
     $('#country-opts').classList.toggle('hidden-el', S.game !== 'countries');
     const hasRecent = S.game !== 'countries' && Object.values(RG[S.game].units).some(u => u.designs.some(d => d.recent));
-    $('#region-opts').classList.toggle('hidden-el', !hasRecent);
+    const levels = S.game !== 'countries' && RG[S.game].levels;
+    $('#region-opts').classList.toggle('hidden-el', !hasRecent && !levels);
+    $('#recent-row').classList.toggle('hidden-el', !hasRecent);
+    $('#level-row').classList.toggle('hidden-el', !levels);
+    if (levels) {
+      const on = (S.levelsBy || {})[S.game] || Object.keys(levels);
+      $('#opt-level').innerHTML = Object.entries(levels).map(([k, l]) => `<div class="chip ${on.includes(k) ? 'on' : ''}" data-v="${k}"><span class="lvtag lv-${k}" style="padding:0 6px;margin-right:2px">&nbsp;</span>${esc(l)}</div>`).join('');
+      $('#opt-level').querySelectorAll('.chip').forEach(ch => ch.onclick = () => {
+        const cur = new Set((S.levelsBy || {})[S.game] || Object.keys(levels)); cur.has(ch.dataset.v) ? cur.delete(ch.dataset.v) : cur.add(ch.dataset.v);
+        if (!cur.size) return; S.levelsBy = Object.assign({}, S.levelsBy, { [S.game]: [...cur] }); save(); renderSetup();
+      });
+    }
     $('#opt-recent').querySelectorAll('.chip').forEach(ch => { ch.classList.toggle('on', (S.recentOnly ? 'recent' : 'all') === ch.dataset.v); ch.onclick = () => { S.recentOnly = ch.dataset.v === 'recent'; save(); renderSetup(); }; });
     ['#opt-mode:mode', '#opt-length:length'].forEach(x => {
       const [id, k] = x.split(':');
@@ -451,7 +498,7 @@ img.blurred{filter:blur(3px)}
     const has = c => R.units[c] && R.units[c].designs.length;
     return `<div class="rmap ${cls || ''} ${S.cities === false ? 'nocities' : ''}" data-rk="${rk}"><svg viewBox="0 0 ${M.w} ${M.h}" role="group" aria-label="Map of ${esc(R.name)}">
       ${(M.frames || []).map(f => `<rect class="frame" x="${f[0]}" y="${f[1]}" width="${f[2]}" height="${f[3]}" rx="6"/>`).join('')}
-      <g class="units">${units.map(u => `<path d="${u.d}" data-c="${u.code}" tabindex="0" aria-label="${esc(u.name)}" class="${has(u.code) ? '' : 'nodata'}"/>`).join('')}</g>
+      <g class="units">${units.map(u => `<path d="${u.d}" data-c="${u.code}" tabindex="0" aria-label="${esc(u.name)}" class="${has(u.code) ? '' : 'nodata'}${R.units[u.code] && R.units[u.code].level ? ' lv-' + R.units[u.code].level : ''}"/>`).join('')}</g>
       <g class="hits">${units.filter(u => u.area < 700).map(u => `<circle class="hit" cx="${u.cx}" cy="${u.cy}" r="11" data-c="${u.code}"/>`).join('')}</g>
       <path class="hov" d=""/>
       <g class="cities">${(M.cities || []).map(c => `<circle cx="${c.x}" cy="${c.y}" r="3"/><text x="${c.a === 'e' ? c.x - 6 : c.x + 6}" y="${c.y + 4 + (c.dy || 0)}"${c.a === 'e' ? ' text-anchor="end"' : ''}>${esc(c.name)}</text>`).join('')}</g>
@@ -700,6 +747,7 @@ img.blurred{filter:blur(3px)}
     $('#s-plates').classList.toggle('hidden-el', v !== 'plates');
     $('#s-front').classList.toggle('hidden-el', v !== 'front');
     $('#s-region').classList.toggle('hidden-el', !v.startsWith('r:'));
+    document.querySelector('main').classList.toggle('wide', v.startsWith('r:'));
     if (v === 'front') renderFront(); else if (v.startsWith('r:')) renderRegion(v.slice(2)); else renderStudy();
   }
   Object.keys(RG).filter(k => RM[k]).forEach(k => $('#s-views').insertAdjacentHTML('beforeend', `<button data-v="r:${k}">${esc(RG[k].label || RG[k].name + ' ' + RG[k].unit + 's')}</button>`));
@@ -734,23 +782,50 @@ img.blurred{filter:blur(3px)}
     const cur = FSEL && M.units.find(u => u.code === FSEL);
     if (cur) showFront(cur); else $('#finfo').innerHTML = `<div class="hint">Click a state or province for details. No front plate on the car? The yellow units are your candidates, plus the purple ones where it is often missing.</div>`;
   }
+  // Regional explorer: map on the left, the selected unit's plates on the right (stacked on phones)
+  const RSEL = {};
   function renderRegion(rk) {
     const R = RG[rk], M = RM[rk], box = $('#s-region');
     const units = M.units.slice().sort((a, b) => a.name.localeCompare(b.name));
-    box.innerHTML = `<p class="hint" style="margin-top:0">Click a ${esc(R.unit)} to jump to its plates. White: reference plate. Below it: the same design ${R.note ? 'blurred' : 'on Street View'}.</p>` + regionSvg(rk) + mapBar() +
-      `<div class="rcards">${units.map(u => { const d = R.units[u.code] || { designs: [] };
-        const fr = frontVaries(rk) && frontRule(rk, u.code);
-        return `<div class="rcard" id="rc-${u.code}"><h4>${esc(u.name)}</h4>${fr ? `<div class="hint">${FRONT_TXT[fr.k]}</div>` : ''}${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}${d.designs.map(g =>
-          `<div class="design">${g.vehicle ? `<span class="vtag">${VEH[g.vehicle] || esc(g.vehicle)}</span> ` : ''}${g.recent ? '<span class="tag">recent coverage</span>' : ''}<div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur, c.sim)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
+    const has = c => R.units[c] && R.units[c].designs.length;
+    if (!RSEL[rk]) RSEL[rk] = (units.find(u => has(u.code)) || units[0]).code;
+    box.innerHTML = `<div class="rx"><div class="rleft">${regionSvg(rk)}${mapBar()}</div><div class="rpanel" id="rpanel"></div></div>
       <p class="hint">${esc(R.credit || '')}${R.note ? ' ' + esc(R.note) : ''}${R.note_sim ? ' ' + esc(R.note_sim) : ''}</p>`;
-    box.querySelector('.rbar .confirm').remove(); box.querySelector('.rbar').insertAdjacentHTML('afterbegin', '<button class="btn confirm hidden-el"></button>');
-    wireRegionMap(box, rk, code => {
-      box.querySelectorAll('.units path.sel, .rcard.hl').forEach(x => x.classList.remove('sel', 'hl'));
-      box.querySelector(`.units path[data-c="${code}"]`).classList.add('sel'); const c = $('#rc-' + code); c.classList.add('hl'); c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, null);
+    box.querySelector('.rbar .confirm').remove();
+    box.querySelector('.rbar').insertAdjacentHTML('afterbegin', `<span class="hint">White: reference plate · below: the same design ${R.note ? 'blurred' : 'on Street View'}</span>`);
+    if (R.levels) {
+      const mp0 = box.querySelector('.rmap'), legend = Object.entries(R.levels).map(([k, l]) => `<span class="lvtag lv-${k}">${esc(l)}</span>`).join(' ');
+      box.querySelector('.rbar .toggle').insertAdjacentHTML('beforebegin', `<span class="lvlegend hidden-el">${legend}</span><button class="btn ghost lvtoggle">${S.byLevel ? 'Color: difficulty' : 'Color: plates'}</button>`);
+      const apply = () => { mp0.classList.toggle('bylevel', !!S.byLevel); box.querySelector('.lvlegend').classList.toggle('hidden-el', !S.byLevel); box.querySelector('.lvtoggle').textContent = S.byLevel ? 'Color: difficulty' : 'Color: plates'; };
+      box.querySelector('.lvtoggle').onclick = () => { S.byLevel = !S.byLevel; save(); apply(); }; apply();
+    }
+    const select = code => {
+      RSEL[rk] = code;
+      box.querySelectorAll('.units path.sel').forEach(x => x.classList.remove('sel'));
+      const pth = box.querySelector(`.units path[data-c="${code}"]`); if (pth) pth.classList.add('sel');
+      const u = M.units.find(x => x.code === code), d = R.units[code] || { designs: [] };
+      const fr = frontVaries(rk) && frontRule(rk, code);
+      const i = units.findIndex(x => x.code === code);
+      const panel = $('#rpanel');
+      panel.innerHTML = `<div class="rhead"><button class="nav" data-d="-1" title="Previous (←)">‹</button><h4>${esc(u.name)}</h4>
+          <select aria-label="Choose a ${esc(R.unit)}">${units.map(x => `<option value="${x.code}"${x.code === code ? ' selected' : ''}>${esc(x.name)}${has(x.code) ? '' : ' (no plate)'}</option>`).join('')}</select>
+          <button class="nav" data-d="1" title="Next (→)">›</button></div>
+        ${d.level && R.levels ? `<span class="lvtag lv-${d.level}">${esc(R.levels[d.level])}</span>` : ''}
+        ${fr ? `<div class="hint">${FRONT_TXT[fr.k]}${fr.note ? ' · ' + esc(fr.note) : ''}</div>` : ''}${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}
+        ${d.designs.slice().reverse().map(g => `<div class="design">${g.vehicle ? `<span class="vtag">${VEH[g.vehicle] || esc(g.vehicle)}</span> ` : ''}${g.recent ? '<span class="tag">recent coverage</span>' : ''}
+          <div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt=""></div>`).join('')}</div>
+          ${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur, c.sim)).join('')}</div>` : ''}</div>`).join('') || `<div class="empty hint">No plate for ${esc(u.name)} yet.</div>`}
+        <div class="rkeys">← → to browse · click a plate to enlarge</div>`;
+      panel.scrollTop = 0;
+      panel.querySelectorAll('.nav').forEach(bt => bt.onclick = () => select(units[(i + +bt.dataset.d + units.length) % units.length].code));
+      panel.querySelector('select').onchange = e => select(e.target.value);
+      wireThumbs(panel);
+    };
+    wireRegionMap(box, rk, select, null);
     const tg = box.querySelector('.rbar .toggle'), mp = box.querySelector('.rmap');
     tg.onclick = () => { S.cities = S.cities === false; save(); mp.classList.toggle('nocities', S.cities === false); tg.textContent = S.cities === false ? 'Show cities' : 'Hide cities'; };
-    wireThumbs(box);
+    box._browse = d => { const i = units.findIndex(x => x.code === RSEL[rk]); select(units[(i + d + units.length) % units.length].code); };
+    select(RSEL[rk]);
   }
   function showFront(u) {
     const r = FR[u.code] || {}, label = (KINDS.find(x => x[0] === r.k) || [, 'No data'])[1];
@@ -767,6 +842,7 @@ img.blurred{filter:blur(3px)}
     ['setup', 'quiz', 'summary', 'study'].forEach(id => $('#' + id).classList.toggle('hidden-el', id !== which));
     $('#tab-quiz').classList.toggle('on', which !== 'study');
     $('#tab-study').classList.toggle('on', which === 'study');
+    document.querySelector('main').classList.toggle('wide', which === 'study' && SV.startsWith('r:'));
     if (which === 'setup') renderSetup();
     if (which === 'study') { if (SV === 'front') renderFront(); else if (SV.startsWith('r:')) renderRegion(SV.slice(2)); else renderStudy(); }
     window.scrollTo(0, 0);
@@ -779,6 +855,9 @@ img.blurred{filter:blur(3px)}
   let keyHandler = null;
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { $('#lb').classList.remove('on'); return; }
+    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && SV.startsWith('r:') && !$('#study').classList.contains('hidden-el') && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) && $('#s-region')._browse) {
+      e.preventDefault(); $('#s-region')._browse(e.key === 'ArrowLeft' ? -1 : 1); return;
+    }
     if (keyHandler && !$('#quiz').classList.contains('hidden-el')) keyHandler(e);
   });
 

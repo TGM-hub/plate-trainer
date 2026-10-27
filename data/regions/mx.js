@@ -24,7 +24,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "BCN": {
    "designs": [
@@ -79,7 +80,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "BCS": {
    "designs": [
@@ -109,7 +111,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "CAM": {
    "designs": [
@@ -160,7 +163,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "CHP": {
    "designs": [
@@ -184,7 +188,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "CHH": {
    "designs": [
@@ -229,7 +234,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "COA": {
    "designs": [
@@ -287,7 +293,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "COL": {
    "designs": [
@@ -317,7 +324,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "DUR": {
    "designs": [
@@ -366,7 +374,8 @@
      "recent": 1,
      "years": "2023"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "GUA": {
    "designs": [
@@ -403,7 +412,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "GRO": {
    "designs": [
@@ -454,7 +464,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "hard"
   },
   "HID": {
    "designs": [
@@ -484,7 +495,8 @@
      "years": "2023"
     }
    ],
-   "note": "Plates here are hard to tell apart."
+   "note": "Plates here are hard to tell apart.",
+   "level": "hard"
   },
   "JAL": {
    "designs": [
@@ -516,7 +528,8 @@
      "recent": 1,
      "years": "2019, 2023"
     }
-   ]
+   ],
+   "level": "easy"
   },
   "MEX": {
    "designs": [
@@ -533,7 +546,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "MIC": {
    "designs": [
@@ -568,7 +582,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "NAY": {
    "designs": [
@@ -619,7 +634,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "easy"
   },
   "OAX": {
    "designs": [
@@ -633,7 +649,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "PUE": {
    "designs": [
@@ -683,7 +700,8 @@
      "recent": 1,
      "years": "2020"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "QUE": {
    "designs": [
@@ -732,7 +750,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "ROO": {
    "designs": [
@@ -786,7 +805,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "SLP": {
    "designs": [
@@ -827,7 +847,8 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "SIN": {
    "designs": [
@@ -873,7 +894,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "SON": {
    "designs": [
@@ -938,7 +960,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "TAB": {
    "designs": [
@@ -978,7 +1001,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "TAM": {
    "designs": [
@@ -1082,7 +1106,8 @@
      "recent": 1,
      "years": "2023"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "TLA": {
    "designs": [
@@ -1140,7 +1165,8 @@
      "recent": 1
     }
    ],
-   "note": "Puebla plates are common in Tlaxcala."
+   "note": "Puebla plates are common in Tlaxcala.",
+   "level": "medium"
   },
   "VER": {
    "designs": [
@@ -1201,7 +1227,8 @@
      "vehicle": "truck"
     }
    ],
-   "note": "The XU-74-337 design is for private trucks."
+   "note": "The XU-74-337 design is for private trucks.",
+   "level": "medium"
   },
   "YUC": {
    "designs": [
@@ -1250,7 +1277,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "ZAC": {
    "designs": [
@@ -1285,11 +1313,25 @@
      "recent": 1,
      "years": "2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "DIF": {
-   "designs": [],
-   "note": "No usable plate in the source document."
+   "designs": [
+    {
+     "refs": [
+      "images/mx/dif-pk-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/dif-pk-blur.jpg",
+       "sim": 1
+      }
+     ],
+     "recent": 1
+    }
+   ],
+   "level": "hard"
   },
   "MOR": {
    "designs": [
@@ -1308,12 +1350,31 @@
      "recent": 1,
      "years": "2019–2022"
     }
-   ]
+   ],
+   "level": "medium"
   },
   "NLE": {
-   "designs": [],
-   "note": "No plate in the source document yet."
+   "designs": [
+    {
+     "refs": [
+      "images/mx/nle-pk-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/nle-pk-blur.jpg",
+       "sim": 1
+      }
+     ],
+     "recent": 1
+    }
+   ],
+   "level": "hard"
   }
  },
- "credit": "Plates and Street View crops: Plonk It, \"Applicably Guessable Mexico Plates Documentation\" (used with permission), and @bagaboiebailey, \"Useful Mexico License Plates 2025 Update\" (designs from 2019 on)."
+ "credit": "Plates and Street View crops: Plonk It, \"Applicably Guessable Mexico Plates Documentation\" (used with permission), and @bagaboiebailey, \"Useful Mexico License Plates 2025 Update\" (designs from 2019 on). Difficulty levels, Mexico City and Nuevo León: Plonk It chart by Angelo and Linus Sköldberg (blurred versions simulated).",
+ "levels": {
+  "easy": "Easy to learn",
+  "medium": "Somewhat easy",
+  "hard": "Harder to learn"
+ }
 };

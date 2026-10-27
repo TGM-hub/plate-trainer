@@ -27,7 +27,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "AK": {
    "designs": [
@@ -61,7 +62,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "AZ": {
    "designs": [
@@ -75,7 +77,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "CO": {
    "designs": [
@@ -99,7 +102,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "CT": {
    "designs": [
@@ -113,7 +117,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "DE": {
    "designs": [
@@ -127,7 +132,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "FL": {
    "designs": [
@@ -141,7 +147,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "GA": {
    "designs": [
@@ -165,7 +172,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "HI": {
    "designs": [
@@ -179,7 +187,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "hard"
   },
   "ID": {
    "designs": [
@@ -193,7 +202,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "IL": {
    "designs": [
@@ -217,7 +227,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "IN": {
    "designs": [
@@ -261,7 +272,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "MD": {
    "designs": [
@@ -285,7 +297,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "MA": {
    "designs": [
@@ -299,7 +312,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "NV": {
    "designs": [
@@ -323,7 +337,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "NH": {
    "designs": [
@@ -337,7 +352,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "NJ": {
    "designs": [
@@ -351,7 +367,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "NM": {
    "designs": [
@@ -375,7 +392,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "NY": {
    "designs": [
@@ -409,7 +427,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "ND": {
    "designs": [
@@ -433,7 +452,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "OK": {
    "designs": [
@@ -457,7 +477,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "OR": {
    "designs": [
@@ -471,7 +492,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "SD": {
    "designs": [
@@ -495,7 +517,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "TX": {
    "designs": [
@@ -519,7 +542,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "UT": {
    "designs": [
@@ -553,7 +577,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "VT": {
    "designs": [
@@ -567,7 +592,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "easy"
   },
   "WA": {
    "designs": [
@@ -581,7 +607,8 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
   },
   "WY": {
    "designs": [
@@ -605,9 +632,530 @@
       }
      ]
     }
-   ]
+   ],
+   "level": "medium"
+  },
+  "AR": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ar-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ar-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "CA": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ca-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ca-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "IA": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ia-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ia-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/ia-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ia-pk1-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "KS": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ks-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ks-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "KY": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ky-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ky-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "LA": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/la-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/la-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/la-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/la-pk1-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "ME": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/me-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/me-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "MI": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/mi-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mi-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mi-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mi-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mi-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mi-pk2-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mi-pk3-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mi-pk3-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "MN": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/mn-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mn-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "MS": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ms-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ms-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/ms-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ms-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/ms-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ms-pk2-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "MO": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/mo-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mo-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mo-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mo-pk1-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "MT": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/mt-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mt-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mt-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mt-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/mt-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/mt-pk2-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "NE": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ne-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ne-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/ne-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ne-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/ne-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ne-pk2-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "NC": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/nc-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/nc-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/nc-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/nc-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/nc-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/nc-pk2-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "OH": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/oh-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/oh-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/oh-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/oh-pk1-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/oh-pk2-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/oh-pk2-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "PA": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/pa-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/pa-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "RI": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/ri-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/ri-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "SC": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/sc-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/sc-pk0-blur.jpg"
+      }
+     ]
+    },
+    {
+     "refs": [
+      "images/us/sc-pk1-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/sc-pk1-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "TN": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/tn-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/tn-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "VA": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/va-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/va-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "DC": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/dc-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/dc-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "WV": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/wv-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/wv-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
+  },
+  "WI": {
+   "designs": [
+    {
+     "refs": [
+      "images/us/wi-pk0-ref.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/us/wi-pk0-blur.jpg"
+      }
+     ]
+    }
+   ],
+   "level": "hard"
   }
  },
- "credit": "Plates and blurred versions: LearnableMeta, meta list \"A Learnable USA – License Plates\". Only the 28 states whose plates stay recognisable when blurred.",
- "note": "The blurred plates are simulated from the reference plate, not real Street View crops."
+ "credit": "Plates and blurred versions: LearnableMeta, meta list \"A Learnable USA – License Plates\" (28 states), and Plonk It chart by Keaton (the other 23 states and the difficulty levels).",
+ "note": "The blurred plates are simulated from the reference plate, not real Street View crops.",
+ "levels": {
+  "easy": "Easy to learn",
+  "medium": "Somewhat easy",
+  "hard": "Harder to learn"
+ }
 };
