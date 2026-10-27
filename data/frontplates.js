@@ -34,8 +34,9 @@ window.FRONT_NOTES = {
   "US-MO": { note: "Front and rear for cars; some trucks carry a single front plate." },
   "US-TX": { note: "Front plate required, but the fine was missing in 2012-2013, so some cars skip it." },
   "US-PR": { note: "Rear plate only." },
-  "CA-NB": { since: 2019, note: "Front plate dropped in 2019." },
+  "CA-NB": { since: 2019, note: "Front plate dropped in 2019; recent coverage shows a mix of cars with and without one." },
   "CA-AB": { note: "Rear plate only since 1992." },
   "CA-SK": { note: "Rear plate only since 2004." },
-  "CA-QC": { note: "Rear plate only since 1979." }
+  "CA-QC": { note: "Rear plate only since 1979." },
+  "CA-NL": { note: "Rear plate only on cars, but pickups, trucks, buses, emergency and government vehicles carry a front plate." }
 };

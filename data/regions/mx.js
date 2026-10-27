@@ -1,7 +1,6 @@
-// Mexico regional plates. Generated from the "Applicably Guessable Mexico Plates Documentation" PDF;
-// edit by hand to add designs: units[CODE].designs = [{refs: [reference plate images], crops: [{img, blur?}]}].
-// vehicle (optional): taxi | truck | bus | commercial | moto, on a design or a crop.
-// blur: 1 = the crop is sharp enough to read, the app blurs it. CODE = ISO 3166-2 suffix (JAL, ROO...).
+// Mexico regional plates. Generated from the Plonk It "Applicably Guessable Mexico Plates Documentation" PDF and the
+// "Useful Mexico License Plates 2025 Update" PDF; designs = [{refs, crops: [{img, blur?, vehicle?}], vehicle?, years?, recent?}].
+// recent: 1 = design from the 2025 update (2019 onwards). blur: 1 = sharp crop the app blurs. CODE = ISO 3166-2 suffix.
 (window.REGIONS ||= {})["mx"] = {
  "name": "Mexico",
  "label": "Mexico states",
@@ -64,6 +63,21 @@
        "img": "images/mx/bcn-011.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/bcn-25-003.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/bcn-25-001.jpg"
+      },
+      {
+       "img": "images/mx/bcn-25-002.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -199,6 +213,21 @@
        "img": "images/mx/chh-040.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/chh-25-006.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/chh-25-004.jpg"
+      },
+      {
+       "img": "images/mx/chh-25-005.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -239,6 +268,24 @@
        "img": "images/mx/coa-048.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/coa-25-009.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/coa-25-007.jpg"
+      },
+      {
+       "img": "images/mx/coa-25-008.jpg"
+      },
+      {
+       "img": "images/mx/coa-25-010.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -303,6 +350,21 @@
        "img": "images/mx/dur-061.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/dur-25-012.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/dur-25-011.jpg"
+      },
+      {
+       "img": "images/mx/dur-25-013.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2023"
     }
    ]
   },
@@ -373,9 +435,26 @@
       }
      ],
      "vehicle": "taxi"
+    },
+    {
+     "refs": [
+      "images/mx/gro-25-016.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/gro-25-014.jpg"
+      },
+      {
+       "img": "images/mx/gro-25-015.jpg"
+      },
+      {
+       "img": "images/mx/gro-25-017.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
-   ],
-   "note": "Little recent (Gen 4) coverage, so the newer plates are hard to find."
+   ]
   },
   "HID": {
    "designs": [
@@ -388,6 +467,21 @@
        "img": "images/mx/hid-078.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/hid-25-020.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/hid-25-018.jpg"
+      },
+      {
+       "img": "images/mx/hid-25-019.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2023"
     }
    ],
    "note": "Plates here are hard to tell apart."
@@ -406,6 +500,21 @@
        "img": "images/mx/jal-081.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/jal-25-022.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/jal-25-021.jpg"
+      },
+      {
+       "img": "images/mx/jal-25-023.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2019, 2023"
     }
    ]
   },
@@ -440,6 +549,24 @@
        "img": "images/mx/mic-087.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/mic-25-025.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/mic-25-024.jpg"
+      },
+      {
+       "img": "images/mx/mic-25-026.jpg"
+      },
+      {
+       "img": "images/mx/mic-25-027.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -470,6 +597,27 @@
        "img": "images/mx/nay-093.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/nay-25-033.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/nay-25-031.jpg"
+      },
+      {
+       "img": "images/mx/nay-25-032.jpg"
+      },
+      {
+       "img": "images/mx/nay-25-034.jpg"
+      },
+      {
+       "img": "images/mx/nay-25-035.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -507,6 +655,33 @@
        "img": "images/mx/pue-100.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/pue-25-036.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/pue-25-037.jpg"
+      },
+      {
+       "img": "images/mx/pue-25-038.jpg"
+      },
+      {
+       "img": "images/mx/pue-25-039.jpg"
+      },
+      {
+       "img": "images/mx/pue-25-040.jpg"
+      },
+      {
+       "img": "images/mx/pue-25-041.jpg"
+      },
+      {
+       "img": "images/mx/pue-25-042.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2020"
     }
    ]
   },
@@ -538,6 +713,24 @@
        "img": "images/mx/que-107.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/que-25-044.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/que-25-043.jpg"
+      },
+      {
+       "img": "images/mx/que-25-045.jpg"
+      },
+      {
+       "img": "images/mx/que-25-046.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -618,6 +811,21 @@
        "img": "images/mx/slp-127.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/slp-25-048.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/slp-25-047.jpg"
+      },
+      {
+       "img": "images/mx/slp-25-049.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -837,6 +1045,42 @@
        "img": "images/mx/tam-179.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/tam-25-052.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/tam-25-050.jpg"
+      },
+      {
+       "img": "images/mx/tam-25-051.jpg"
+      },
+      {
+       "img": "images/mx/tam-25-053.jpg"
+      },
+      {
+       "img": "images/mx/tam-25-054.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
+    },
+    {
+     "refs": [
+      "images/mx/tam-25-056.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/tam-25-055.jpg"
+      },
+      {
+       "img": "images/mx/tam-25-057.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2023"
     }
    ]
   },
@@ -866,8 +1110,37 @@
        "img": "images/mx/tla-186.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/tla-25-059.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/tla-25-058.jpg"
+      },
+      {
+       "img": "images/mx/tla-25-060.jpg"
+      },
+      {
+       "img": "images/mx/tla-25-061.jpg"
+      }
+     ],
+     "recent": 1
+    },
+    {
+     "refs": [
+      "images/mx/tla-25-063.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/tla-25-062.jpg"
+      }
+     ],
+     "recent": 1
     }
-   ]
+   ],
+   "note": "Puebla plates are common in Tlaxcala."
   },
   "VER": {
    "designs": [
@@ -993,6 +1266,24 @@
        "img": "images/mx/zac-215.jpg"
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/zac-25-066.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/zac-25-064.jpg"
+      },
+      {
+       "img": "images/mx/zac-25-065.jpg"
+      },
+      {
+       "img": "images/mx/zac-25-067.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2022"
     }
    ]
   },
@@ -1001,13 +1292,28 @@
    "note": "No usable plate in the source document."
   },
   "MOR": {
-   "designs": [],
-   "note": "No plate in the source document yet."
+   "designs": [
+    {
+     "refs": [
+      "images/mx/mor-25-028.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/mor-25-029.jpg"
+      },
+      {
+       "img": "images/mx/mor-25-030.jpg"
+      }
+     ],
+     "recent": 1,
+     "years": "2019–2022"
+    }
+   ]
   },
   "NLE": {
    "designs": [],
    "note": "No plate in the source document yet."
   }
  },
- "credit": "Plates and Street View crops: \"Applicably Guessable Mexico Plates Documentation\" (community Google Doc)."
+ "credit": "Plates and Street View crops: Plonk It, \"Applicably Guessable Mexico Plates Documentation\" (used with permission), and @bagaboiebailey, \"Useful Mexico License Plates 2025 Update\" (designs from 2019 on)."
 };

@@ -141,6 +141,7 @@ img.blurred{filter:blur(3px)}
 .strip{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
 .strip .thumb{flex:none;height:64px;width:auto;background:#0b0c10;border-radius:6px;overflow:hidden;cursor:zoom-in;display:flex;align-items:center}
 .strip .thumb img{height:64px;width:auto;display:block}
+.strip .thumb.sim{outline:1px dashed var(--muted);outline-offset:-1px}
 .rcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:14px}
 .rcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;scroll-margin-top:80px}
 .rcard.hl{border-color:var(--accent)}
@@ -204,6 +205,10 @@ img.blurred{filter:blur(3px)}
     <h3>Category</h3>
     <div class="row" id="opt-category"></div>
     </div>
+    <div id="region-opts" class="hidden-el">
+      <h3>Plates</h3>
+      <div class="row" id="opt-recent"><div class="chip" data-v="all">All designs</div><div class="chip" data-v="recent">Recent coverage only (2019+)</div></div>
+    </div>
     <h3>Round length</h3>
     <div class="row" id="opt-length">
       <div class="chip" data-v="10">10</div>
@@ -260,6 +265,8 @@ img.blurred{filter:blur(3px)}
 <script src="data/regions/mx-map.js"></script>
 <script src="data/regions/us.js"></script>
 <script src="data/regions/us-map.js"></script>
+<script src="data/regions/ca.js"></script>
+<script src="data/regions/ca-map.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
@@ -300,7 +307,8 @@ img.blurred{filter:blur(3px)}
   const regionName = (rk, code) => (RM[rk].units.find(u => u.code === code) || {}).name || code;
   function regionItems(rk) {
     const out = [];
-    Object.entries(RG[rk].units).forEach(([code, u]) => u.designs.forEach((d, di) => d.crops.forEach(c =>
+    const recentOnly = S.recentOnly && Object.values(RG[rk].units).some(u => u.designs.some(d => d.recent));
+    Object.entries(RG[rk].units).forEach(([code, u]) => u.designs.forEach((d, di) => (recentOnly && !d.recent ? [] : d.crops).forEach(c =>
       out.push({ region: rk, code, design: di, img: c.img, blur: !!c.blur, vehicle: c.vehicle || d.vehicle || null, country: regionName(rk, code), note: u.note || '', tags: [], lookalikes: [] }))));
     return out;
   }
@@ -311,6 +319,9 @@ img.blurred{filter:blur(3px)}
       .map(([k, l, n]) => `<div class="chip ${S.game === k ? 'on' : ''}" data-v="${k}">${esc(l)}<small>${n}</small></div>`).join('');
     $('#opt-game').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.game = ch.dataset.v; save(); renderSetup(); });
     $('#country-opts').classList.toggle('hidden-el', S.game !== 'countries');
+    const hasRecent = S.game !== 'countries' && Object.values(RG[S.game].units).some(u => u.designs.some(d => d.recent));
+    $('#region-opts').classList.toggle('hidden-el', !hasRecent);
+    $('#opt-recent').querySelectorAll('.chip').forEach(ch => { ch.classList.toggle('on', (S.recentOnly ? 'recent' : 'all') === ch.dataset.v); ch.onclick = () => { S.recentOnly = ch.dataset.v === 'recent'; save(); renderSetup(); }; });
     ['#opt-mode:mode', '#opt-length:length'].forEach(x => {
       const [id, k] = x.split(':');
       $(id).querySelectorAll('.chip').forEach(ch => ch.classList.toggle('on', ch.dataset.v === S[k]));
@@ -502,7 +513,7 @@ img.blurred{filter:blur(3px)}
     }, $('#qarea .rbar'));
     keyHandler = null;
   }
-  const thumbImg = (src, blur) => `<div class="thumb" data-img="${esc(src)}"><img src="${esc(src)}" alt="" loading="lazy"${blur ? ' class="blurred"' : ''}></div>`;
+  const thumbImg = (src, blur, sim) => `<div class="thumb${sim ? ' sim' : ''}" data-img="${esc(src)}"${sim ? ' title="Simulated blur"' : ''}><img src="${esc(src)}" alt="" loading="lazy"${blur ? ' class="blurred"' : ''}></div>`;
   // Feedback for a regional answer: the design of the region you clicked vs the design shown
   function regionCompareHtml(p, answer) {
     const R = RG[p.region], M = RM[p.region];
@@ -518,7 +529,7 @@ img.blurred{filter:blur(3px)}
     } else if (right.refs.length) {
       html += `<div class="strip">${right.refs.map(r => thumbImg(r)).join('')}</div>`;
     }
-    if (others.length) html += `<div class="simline">Same design${R.note ? ' (blurred)' : ' on Street View'}:</div><div class="strip">${others.map(c => thumbImg(c.img, c.blur)).join('')}</div>`;
+    if (others.length) html += `<div class="simline">Same design${R.note ? ' (blurred)' : ' on Street View'}:</div><div class="strip">${others.map(c => thumbImg(c.img, c.blur, c.sim)).join('')}</div>`;
     const fr = frontVaries(p.region) && frontRule(p.region, p.code);
     if (fr) html += `<div class="simline">${esc(p.country)}: <b>${FRONT_TXT[fr.k]}</b>${fr.note ? ' · ' + esc(fr.note) : ''}</div>`;
     return html;
@@ -730,8 +741,8 @@ img.blurred{filter:blur(3px)}
       `<div class="rcards">${units.map(u => { const d = R.units[u.code] || { designs: [] };
         const fr = frontVaries(rk) && frontRule(rk, u.code);
         return `<div class="rcard" id="rc-${u.code}"><h4>${esc(u.name)}</h4>${fr ? `<div class="hint">${FRONT_TXT[fr.k]}</div>` : ''}${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}${d.designs.map(g =>
-          `<div class="design">${g.vehicle ? `<span class="vtag">${VEH[g.vehicle] || esc(g.vehicle)}</span>` : ''}<div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
-      <p class="hint">${esc(R.credit || '')}${R.note ? ' ' + esc(R.note) : ''}</p>`;
+          `<div class="design">${g.vehicle ? `<span class="vtag">${VEH[g.vehicle] || esc(g.vehicle)}</span> ` : ''}${g.recent ? '<span class="tag">recent coverage</span>' : ''}<div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur, c.sim)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
+      <p class="hint">${esc(R.credit || '')}${R.note ? ' ' + esc(R.note) : ''}${R.note_sim ? ' ' + esc(R.note_sim) : ''}</p>`;
     box.querySelector('.rbar .confirm').remove(); box.querySelector('.rbar').insertAdjacentHTML('afterbegin', '<button class="btn confirm hidden-el"></button>');
     wireRegionMap(box, rk, code => {
       box.querySelectorAll('.units path.sel, .rcard.hl').forEach(x => x.classList.remove('sel', 'hl'));
@@ -775,10 +786,16 @@ img.blurred{filter:blur(3px)}
   const ISO = {}; COUNTRIES.forEach(c => ISO[c.f.toLowerCase()] = c.n);
   function applyHash() {
     const h = location.hash.slice(1).toLowerCase();
-    if (h === 'front') { keyHandler = null; Q = null; show('study'); setView('front'); return true; }
-    if (RG[h] && RM[h]) { keyHandler = null; Q = null; show('study'); setView('r:' + h); return true; }
+    const open = v => { keyHandler = null; Q = null; show('study'); setView(v); return true; };
+    if (h === 'front') return open('front');
+    // #r-mx: regional explorer. #mx: the country's own plates if any, else its regional map, else the front plates map
+    const rk = h.startsWith('r-') ? h.slice(2) : null;
+    if (rk && RG[rk] && RM[rk]) return open('r:' + rk);
     const n = ISO[h];
+    if (n && !PLATES.some(p => p.country === n) && RG[h] && RM[h]) return open('r:' + h);
     if (!n) return false;
+    // a country with no plate of its own but front-plate rules (Canada) opens the front plates map
+    if (!PLATES.some(p => p.country === n) && window.FRONT_RULES && FRONT_RULES[h.toUpperCase()]) return open('front');
     if (SV !== 'plates') setView('plates');
     SC = n; $('#s-search').value = ''; $('#s-cont').value = ''; $('#s-cat').value = 'all';
     keyHandler = null; Q = null; show('study'); return true;
