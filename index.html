@@ -110,16 +110,33 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 .finfo .name{font-weight:700;font-size:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .finfo p{margin:6px 0 0;color:#cfd3de}
 /* regional mode */
-.rmap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:8px;margin-top:10px}
+.rmap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:8px;margin-top:10px;position:relative}
+.rmap .hov{fill:rgba(255,255,255,.12);stroke:#fff;stroke-width:2;pointer-events:none}
+.rmap .hit{fill:transparent;stroke:none;cursor:pointer}
+.rmap .frame{fill:none;stroke:var(--line);stroke-dasharray:4 3}
+.rmap .cities{pointer-events:none}
+.rmap .cities circle{fill:#fff;stroke:#111;stroke-width:1}
+.rmap .cities text{fill:#e9ecf3;font-size:12px;font-weight:600;paint-order:stroke;stroke:rgba(10,12,18,.85);stroke-width:3px;stroke-linejoin:round}
+.rmap.nocities .cities{display:none}
+.rtip{position:absolute;pointer-events:none;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:14px;font-weight:600;white-space:nowrap;display:none;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.rtip small{display:block;color:var(--muted);font-weight:500;font-size:12px}
+.rbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;min-height:38px}
+.rbar .toggle{margin-left:auto}
+.rbar .confirm{display:none}
+.rbar .confirm.on{display:inline-flex}
+.vbadge{position:absolute;top:10px;left:10px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:13px;padding:5px 10px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.vtag{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:12px;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+#qimgwrap{position:relative}
+@media (max-width:600px){ .rmap .cities text{font-size:14px;stroke-width:3px} }
 .rmap svg{display:block;width:100%;height:auto;max-height:58vh;margin:0 auto}
 .rmap path{outline:none}
-.rmap path{fill:#3a4157;stroke:var(--bg);stroke-width:.8;cursor:pointer}
-.rmap path:hover{fill:#55607d}
-.rmap path:focus-visible{outline:none;fill:#55607d;stroke:#fff;stroke-width:1.5}
-.rmap.done path{cursor:default} .rmap.done path:hover{fill:#3a4157}
-.rmap path.good,.rmap.done path.good{fill:var(--good)} .rmap path.bad,.rmap.done path.bad{fill:var(--bad)}
-.rmap path.nodata{fill:#2a2f3f}
-.rmap path.sel{stroke:#fff;stroke-width:2}
+.rmap .units path{fill:#3a4157;stroke:var(--bg);stroke-width:.8;cursor:pointer}
+.rmap .units path.hover{fill:#55607d}
+.rmap .units path:focus-visible{outline:none;fill:#55607d}
+.rmap.done .units path{cursor:default} .rmap.done .units path.hover{fill:#3a4157}
+.rmap .units path.good,.rmap.done .units path.good{fill:var(--good)} .rmap .units path.bad,.rmap.done .units path.bad{fill:var(--bad)}
+.rmap .units path.nodata{fill:#2a2f3f}
+.rmap .units path.sel{stroke:#fff;stroke-width:2}
 img.blurred{filter:blur(3px)}
 .strip{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
 .strip .thumb{flex:none;height:64px;width:auto;background:#0b0c10;border-radius:6px;overflow:hidden;cursor:zoom-in;display:flex;align-items:center}
@@ -206,7 +223,7 @@ img.blurred{filter:blur(3px)}
       <div class="bar"><i id="progress"></i></div>
       <div class="score" id="scoreline"></div>
     </div>
-    <div class="imgwrap" id="qimgwrap"><img id="qimg" alt="License plate"></div>
+    <div class="imgwrap" id="qimgwrap"><img id="qimg" alt="License plate"><span class="vbadge hidden-el" id="vbadge"></span></div>
     <div id="qarea"></div>
   </section>
 
@@ -241,6 +258,8 @@ img.blurred{filter:blur(3px)}
 <script src="data/frontmap.js"></script>
 <script src="data/regions/mx.js"></script>
 <script src="data/regions/mx-map.js"></script>
+<script src="data/regions/us.js"></script>
+<script src="data/regions/us-map.js"></script>
 <script>
 (() => {
   const $ = s => document.querySelector(s);
@@ -282,13 +301,13 @@ img.blurred{filter:blur(3px)}
   function regionItems(rk) {
     const out = [];
     Object.entries(RG[rk].units).forEach(([code, u]) => u.designs.forEach((d, di) => d.crops.forEach(c =>
-      out.push({ region: rk, code, design: di, img: c.img, blur: !!c.blur, country: regionName(rk, code), note: u.note || '', tags: [], lookalikes: [] }))));
+      out.push({ region: rk, code, design: di, img: c.img, blur: !!c.blur, vehicle: c.vehicle || d.vehicle || null, country: regionName(rk, code), note: u.note || '', tags: [], lookalikes: [] }))));
     return out;
   }
   const pool = () => S.game !== 'countries' ? regionItems(S.game) : PLATES.filter(p => S.continents.includes(p.continent) && inCat(p, S.category));
 
   function renderSetup() {
-    $('#opt-game').innerHTML = [['countries', 'Countries', PLATES.length], ...Object.keys(RG).filter(k => RM[k]).map(k => [k, `${RG[k].name} ${RG[k].unit}s`, regionItems(k).length])]
+    $('#opt-game').innerHTML = [['countries', 'Countries', PLATES.length], ...Object.keys(RG).filter(k => RM[k]).map(k => [k, RG[k].label || `${RG[k].name} ${RG[k].unit}s`, regionItems(k).length])]
       .map(([k, l, n]) => `<div class="chip ${S.game === k ? 'on' : ''}" data-v="${k}">${esc(l)}<small>${n}</small></div>`).join('');
     $('#opt-game').querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S.game = ch.dataset.v; save(); renderSetup(); });
     $('#country-opts').classList.toggle('hidden-el', S.game !== 'countries');
@@ -381,6 +400,9 @@ img.blurred{filter:blur(3px)}
     const p = Q.items[Q.i];
     $('#qimg').src = p.img;
     $('#qimg').classList.toggle('blurred', !!p.blur);
+    const veh = vehicleOf(p);
+    $('#vbadge').classList.toggle('hidden-el', !veh);
+    if (veh) $('#vbadge').textContent = VEH[veh] || veh;
     updateTop();
     if (Q.region) askRegion(p);
     else if (Q.duel) askCountry(p, shuffle([p.country, duelOpponent(p, Q.onlyMix)]), 'Which of the two?');
@@ -402,28 +424,82 @@ img.blurred{filter:blur(3px)}
     $('#qarea').innerHTML = `<div class="question">${question}</div>` + optButtons(options, v => flag(v) + esc(v));
     wireOpts((v, btns) => { mark(btns, p.country, v); finish(p, v); });
   }
+  // ---------- vehicle type ----------
+  const VEH = { taxi: '🚕 Taxi', truck: '🚚 Truck', bus: '🚌 Bus', commercial: '🚕 Taxi / commercial', moto: '🏍 Motorbike' };
+  const vehicleOf = p => p.vehicle || (p.tags && p.tags.includes('commercial') ? 'commercial' : null);
+  // front-plate rule for a region unit, from data/frontplates.js
+  const frontRule = (rk, code) => (window.FRONT_RULES && FR[rk.toUpperCase() + '-' + code]) || null;
+  // only worth showing where the rule differs between units (all of Mexico has front and rear plates)
+  const frontVaries = rk => new Set(RM[rk].units.map(u => (frontRule(rk, u.code) || {}).k)).size > 1;
+  const FRONT_TXT = { rear: 'Rear plate only', both: 'Front and rear plates', mostly: 'Front and rear, front often missing' };
+
   // regional: click the region on the map
+  // Map of a region set: units, insets, small-unit hit areas, hover outline, big cities, tooltip
   function regionSvg(rk, cls) {
-    const M = RM[rk], units = M.units.slice().sort((a, b) => b.area - a.area);
-    return `<div class="rmap ${cls || ''}"><svg viewBox="0 0 ${M.w} ${M.h}" role="group" aria-label="Map of ${esc(RG[rk].name)}">${units.map(u =>
-      `<path d="${u.d}" data-c="${u.code}" tabindex="0" class="${RG[rk].units[u.code] && RG[rk].units[u.code].designs.length ? '' : 'nodata'}"><title>${esc(u.name)}</title></path>`).join('')}</svg></div>`;
+    const M = RM[rk], R = RG[rk], units = M.units.slice().sort((a, b) => b.area - a.area);
+    const has = c => R.units[c] && R.units[c].designs.length;
+    return `<div class="rmap ${cls || ''} ${S.cities === false ? 'nocities' : ''}" data-rk="${rk}"><svg viewBox="0 0 ${M.w} ${M.h}" role="group" aria-label="Map of ${esc(R.name)}">
+      ${(M.frames || []).map(f => `<rect class="frame" x="${f[0]}" y="${f[1]}" width="${f[2]}" height="${f[3]}" rx="6"/>`).join('')}
+      <g class="units">${units.map(u => `<path d="${u.d}" data-c="${u.code}" tabindex="0" aria-label="${esc(u.name)}" class="${has(u.code) ? '' : 'nodata'}"/>`).join('')}</g>
+      <g class="hits">${units.filter(u => u.area < 700).map(u => `<circle class="hit" cx="${u.cx}" cy="${u.cy}" r="11" data-c="${u.code}"/>`).join('')}</g>
+      <path class="hov" d=""/>
+      <g class="cities">${(M.cities || []).map(c => `<circle cx="${c.x}" cy="${c.y}" r="3"/><text x="${c.a === 'e' ? c.x - 6 : c.x + 6}" y="${c.y + 4 + (c.dy || 0)}"${c.a === 'e' ? ' text-anchor="end"' : ''}>${esc(c.name)}</text>`).join('')}</g>
+    </svg><div class="rtip"></div></div>`;
   }
+  // Hover/tap behaviour. onPick(code) is called on click; on touch screens the first tap selects and a Confirm button commits.
+  function wireRegionMap(box, rk, onPick, bar) {
+    const map = box.querySelector('.rmap'), M = RM[rk], R = RG[rk], tip = map.querySelector('.rtip'), hov = map.querySelector('.hov');
+    const unit = c => M.units.find(u => u.code === c);
+    let touch = false, pending = null;
+    const show = (code, e) => {
+      const u = unit(code); if (!u) return;
+      map.querySelectorAll('.units path.hover').forEach(x => x.classList.remove('hover'));
+      map.querySelector(`.units path[data-c="${code}"]`).classList.add('hover');
+      hov.setAttribute('d', u.d);
+      const d = R.units[code], fr = frontVaries(rk) && frontRule(rk, code);
+      tip.innerHTML = `${esc(u.name)}${map.classList.contains('done') || !map.classList.contains('quiz') ? `<small>${d && d.designs.length ? d.designs.length + ' design' + (d.designs.length > 1 ? 's' : '') : 'no plate data'}${fr ? ' · ' + FRONT_TXT[fr.k].toLowerCase() : ''}</small>` : ''}`;
+      tip.style.display = 'block';
+      const r = map.getBoundingClientRect();
+      let x, y;
+      if (e && e.clientX != null) { x = e.clientX - r.left + 14; y = e.clientY - r.top + 16; }
+      else { const svg = map.querySelector('svg').getBoundingClientRect(); x = (u.cx / M.w) * svg.width + (svg.left - r.left) + 10; y = (u.cy / M.h) * svg.height + (svg.top - r.top) + 10; }
+      tip.style.left = Math.max(4, Math.min(x, r.width - tip.offsetWidth - 4)) + 'px';
+      tip.style.top = Math.min(y, r.height - tip.offsetHeight - 4) + 'px';
+    };
+    const hide = () => { if (pending) return; tip.style.display = 'none'; hov.setAttribute('d', ''); map.querySelectorAll('.units path.hover').forEach(x => x.classList.remove('hover')); };
+    const targets = map.querySelectorAll('.units path, .hits circle');
+    targets.forEach(t => {
+      const code = t.dataset.c;
+      t.addEventListener('pointerdown', e => { touch = e.pointerType === 'touch' || e.pointerType === 'pen'; });
+      t.addEventListener('pointermove', e => { if (!touch && !pending) show(code, e); });
+      t.addEventListener('pointerleave', () => { if (!touch) hide(); });
+      t.addEventListener('focus', () => show(code));
+      t.addEventListener('blur', hide);
+      t.addEventListener('click', e => {
+        if (touch && bar) { pending = code; show(code, e); const c = bar.querySelector('.confirm'); c.classList.add('on'); c.textContent = `Confirm ${unit(code).name}`; return; }
+        onPick(code);
+      });
+      t.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPick(code); } });
+    });
+    if (bar) {
+      bar.querySelector('.confirm').onclick = () => { if (pending) { const c = pending; pending = null; bar.querySelector('.confirm').classList.remove('on'); onPick(c); } };
+      bar.querySelector('.toggle').onclick = () => { S.cities = S.cities === false; save(); map.classList.toggle('nocities', S.cities === false); bar.querySelector('.toggle').textContent = S.cities === false ? 'Show cities' : 'Hide cities'; };
+    }
+    return { clearPending: () => { pending = null; if (bar) bar.querySelector('.confirm').classList.remove('on'); hide(); } };
+  }
+  const mapBar = () => `<div class="rbar"><button class="btn confirm"></button><button class="btn ghost toggle">${S.cities === false ? 'Show cities' : 'Hide cities'}</button></div>`;
   function askRegion(p) {
     const R = RG[p.region];
-    $('#qarea').innerHTML = `<div class="question">Which ${R.unit}?</div>` + regionSvg(p.region);
+    $('#qarea').innerHTML = `<div class="question">Which ${R.unit}?</div>` + regionSvg(p.region, 'quiz') + mapBar();
     const map = $('#qarea .rmap');
-    map.querySelectorAll('path').forEach(pth => {
-      const pick = () => {
-        if (map.classList.contains('done')) return;
-        map.classList.add('done');
-        const code = pth.dataset.c;
-        map.querySelector(`path[data-c="${p.code}"]`).classList.add('good');
-        if (code !== p.code) pth.classList.add('bad');
-        finish(p, regionName(p.region, code));
-      };
-      pth.onclick = pick;
-      pth.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } };
-    });
+    const ctl = wireRegionMap($('#qarea'), p.region, code => {
+      if (map.classList.contains('done')) return;
+      ctl.clearPending();
+      map.classList.add('done');
+      map.querySelector(`.units path[data-c="${p.code}"]`).classList.add('good');
+      if (code !== p.code) map.querySelector(`.units path[data-c="${code}"]`).classList.add('bad');
+      finish(p, regionName(p.region, code));
+    }, $('#qarea .rbar'));
     keyHandler = null;
   }
   const thumbImg = (src, blur) => `<div class="thumb" data-img="${esc(src)}"><img src="${esc(src)}" alt="" loading="lazy"${blur ? ' class="blurred"' : ''}></div>`;
@@ -442,7 +518,9 @@ img.blurred{filter:blur(3px)}
     } else if (right.refs.length) {
       html += `<div class="strip">${right.refs.map(r => thumbImg(r)).join('')}</div>`;
     }
-    if (others.length) html += `<div class="simline">Same design on Street View:</div><div class="strip">${others.map(c => thumbImg(c.img, c.blur)).join('')}</div>`;
+    if (others.length) html += `<div class="simline">Same design${R.note ? ' (blurred)' : ' on Street View'}:</div><div class="strip">${others.map(c => thumbImg(c.img, c.blur)).join('')}</div>`;
+    const fr = frontVaries(p.region) && frontRule(p.region, p.code);
+    if (fr) html += `<div class="simline">${esc(p.country)}: <b>${FRONT_TXT[fr.k]}</b>${fr.note ? ' · ' + esc(fr.note) : ''}</div>`;
     return html;
   }
 
@@ -613,7 +691,7 @@ img.blurred{filter:blur(3px)}
     $('#s-region').classList.toggle('hidden-el', !v.startsWith('r:'));
     if (v === 'front') renderFront(); else if (v.startsWith('r:')) renderRegion(v.slice(2)); else renderStudy();
   }
-  Object.keys(RG).filter(k => RM[k]).forEach(k => $('#s-views').insertAdjacentHTML('beforeend', `<button data-v="r:${k}">${esc(RG[k].name)} ${esc(RG[k].unit)}s</button>`));
+  Object.keys(RG).filter(k => RM[k]).forEach(k => $('#s-views').insertAdjacentHTML('beforeend', `<button data-v="r:${k}">${esc(RG[k].label || RG[k].name + ' ' + RG[k].unit + 's')}</button>`));
   $('#s-views').querySelectorAll('button').forEach(b => b.onclick = () => setView(b.dataset.v));
   function renderFront() {
     const M = FRONT_MAP, box = $('#s-front');
@@ -648,15 +726,19 @@ img.blurred{filter:blur(3px)}
   function renderRegion(rk) {
     const R = RG[rk], M = RM[rk], box = $('#s-region');
     const units = M.units.slice().sort((a, b) => a.name.localeCompare(b.name));
-    box.innerHTML = `<p class="hint" style="margin-top:0">Click a ${esc(R.unit)} to jump to its plates. White: reference plate. Dark: the same design on Street View.</p>` + regionSvg(rk) +
+    box.innerHTML = `<p class="hint" style="margin-top:0">Click a ${esc(R.unit)} to jump to its plates. White: reference plate. Below it: the same design ${R.note ? 'blurred' : 'on Street View'}.</p>` + regionSvg(rk) + mapBar() +
       `<div class="rcards">${units.map(u => { const d = R.units[u.code] || { designs: [] };
-        return `<div class="rcard" id="rc-${u.code}"><h4>${esc(u.name)}</h4>${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}${d.designs.map(g =>
-          `<div class="design"><div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
-      <p class="hint">${esc(R.credit || '')}</p>`;
-    box.querySelectorAll('.rmap path').forEach(pth => pth.onclick = () => {
-      box.querySelectorAll('.rmap path.sel, .rcard.hl').forEach(x => x.classList.remove('sel', 'hl'));
-      pth.classList.add('sel'); const c = $('#rc-' + pth.dataset.c); c.classList.add('hl'); c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
+        const fr = frontVaries(rk) && frontRule(rk, u.code);
+        return `<div class="rcard" id="rc-${u.code}"><h4>${esc(u.name)}</h4>${fr ? `<div class="hint">${FRONT_TXT[fr.k]}</div>` : ''}${d.note ? `<div class="hint">${esc(d.note)}</div>` : ''}${d.designs.map(g =>
+          `<div class="design">${g.vehicle ? `<span class="vtag">${VEH[g.vehicle] || esc(g.vehicle)}</span>` : ''}<div class="refs">${g.refs.map(r => `<div class="thumb" data-img="${esc(r)}"><img src="${esc(r)}" alt="" loading="lazy"></div>`).join('')}</div>${g.crops.length ? `<div class="strip">${g.crops.map(c => thumbImg(c.img, c.blur)).join('')}</div>` : ''}</div>`).join('') || (d.note ? '' : '<div class="hint">No plate yet.</div>')}</div>`; }).join('')}</div>
+      <p class="hint">${esc(R.credit || '')}${R.note ? ' ' + esc(R.note) : ''}</p>`;
+    box.querySelector('.rbar .confirm').remove(); box.querySelector('.rbar').insertAdjacentHTML('afterbegin', '<button class="btn confirm hidden-el"></button>');
+    wireRegionMap(box, rk, code => {
+      box.querySelectorAll('.units path.sel, .rcard.hl').forEach(x => x.classList.remove('sel', 'hl'));
+      box.querySelector(`.units path[data-c="${code}"]`).classList.add('sel'); const c = $('#rc-' + code); c.classList.add('hl'); c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, null);
+    const tg = box.querySelector('.rbar .toggle'), mp = box.querySelector('.rmap');
+    tg.onclick = () => { S.cities = S.cities === false; save(); mp.classList.toggle('nocities', S.cities === false); tg.textContent = S.cities === false ? 'Show cities' : 'Hide cities'; };
     wireThumbs(box);
   }
   function showFront(u) {

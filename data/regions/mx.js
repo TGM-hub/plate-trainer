@@ -1,8 +1,10 @@
 // Mexico regional plates. Generated from the "Applicably Guessable Mexico Plates Documentation" PDF;
 // edit by hand to add designs: units[CODE].designs = [{refs: [reference plate images], crops: [{img, blur?}]}].
+// vehicle (optional): taxi | truck | bus | commercial | moto, on a design or a crop.
 // blur: 1 = the crop is sharp enough to read, the app blurs it. CODE = ISO 3166-2 suffix (JAL, ROO...).
 (window.REGIONS ||= {})["mx"] = {
  "name": "Mexico",
+ "label": "Mexico states",
  "unit": "state",
  "units": {
   "AGU": {
@@ -345,16 +347,11 @@
    "designs": [
     {
      "refs": [
-      "images/mx/gro-071.jpg",
-      "images/mx/gro-072.jpg"
+      "images/mx/gro-071.jpg"
      ],
      "crops": [
       {
        "img": "images/mx/gro-073.jpg"
-      },
-      {
-       "img": "images/mx/gro-074.jpg",
-       "blur": 1
       },
       {
        "img": "images/mx/gro-075.jpg"
@@ -364,6 +361,18 @@
        "blur": 1
       }
      ]
+    },
+    {
+     "refs": [
+      "images/mx/gro-072.jpg"
+     ],
+     "crops": [
+      {
+       "img": "images/mx/gro-074.jpg",
+       "blur": 1
+      }
+     ],
+     "vehicle": "taxi"
     }
    ],
    "note": "Little recent (Gen 4) coverage, so the newer plates are hard to find."
@@ -915,10 +924,11 @@
        "img": "images/mx/ver-200.jpg",
        "blur": 1
       }
-     ]
+     ],
+     "vehicle": "truck"
     }
    ],
-   "note": "The XU-74-337 design is a private truck plate."
+   "note": "The XU-74-337 design is for private trucks."
   },
   "YUC": {
    "designs": [
