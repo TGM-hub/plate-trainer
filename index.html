@@ -211,10 +211,12 @@ main.wide{max-width:1480px}
 .lb img{max-width:100%;max-height:100%;image-rendering:auto;min-width:min(90vw,800px);object-fit:contain}
 .hidden-el{display:none!important}
 @media (max-width:600px){ .cmp .thumb,.cmp .noimg{height:110px;min-height:110px} .cmp .thumb img{max-height:110px} header{padding:10px 14px} .logo span{display:none} .opts{grid-template-columns:1fr 1fr} .opt kbd{display:none} }
+.tgm-nav{display:inline-flex;gap:4px;align-items:center;margin-right:6px;flex:none}.tgm-nav a{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:7px;border:1px solid currentColor;opacity:.5;color:inherit;text-decoration:none;font-size:14px;line-height:1}.tgm-nav a:hover,.tgm-nav a:focus-visible{opacity:1}
 </style>
 </head>
 <body>
 <header>
+<span class="tgm-nav"><a href="https://tgm-hub.github.io/Atlas/" title="Atlas">⌂</a><a href="https://tgm-hub.github.io/Atlas/daily.html" target="gg-daily" title="Révision du jour">⏱</a></span>
   <div class="logo"><div class="plate"></div><span>Plate Trainer</span></div>
   <nav>
     <button id="tab-quiz" class="on">Quiz</button>
@@ -394,9 +396,20 @@ main.wide{max-width:1480px}
 
   // ---------- distractors ----------
   const jitter = () => Math.random() * 0.9;
+  // GeoGuessr frequency tiers (same defaults as city-placer; its per-country overrides in cp.prefs win)
+  const TIER_DEF = {};
+  [['US CA MX BR AR CL CO PE AU NZ JP KR ID PH MY TH IN RU UA TR ZA FR ES IT DE GB PL RO SE NO FI', 1],
+   ['PT IE NL BE CH AT CZ SK HU SI HR RS BG GR AL MK ME DK EE LV LT IS TW VN KH LA LK BD KZ KG MN EC BO UY GT DO PA PR KE NG GH SN UG BW TN IL JO AE', 2],
+   ['AD MC SM LI LU MT GI JE IM FO GL BM CW VI GU MP AS HK MO SG QA LB PS BT LS SZ RW RE MG CX CC', 3]]
+    .forEach(([l, t]) => l.split(' ').forEach(k => TIER_DEF[k] = t));
+  let TIER_OV = {};
+  try { TIER_OV = (JSON.parse(localStorage.getItem('cp.prefs') || '{}').tierOv) || {}; } catch (e) {}
+  const tierOf = name => { const iso = C[name] && C[name].f; return iso ? +(TIER_OV[iso] || TIER_DEF[iso] || 4) : 4; };
   function countryScore(plate, name) {
     let s = jitter();
     if (plate.lookalikes.includes(name)) s += 100;
+    // a rare territory is a giveaway distractor when the answer is a common country
+    else if (tierOf(name) >= 3 && tierOf(plate.country) <= 2) s -= 50;
     const tg = ctags[name] || new Set();
     plate.tags.forEach(t => { if (tg.has(t)) s += (t === 'eu-strip' ? 3 : 10); });
     if (C[name] && C[name].c === plate.continent) s += 5;
