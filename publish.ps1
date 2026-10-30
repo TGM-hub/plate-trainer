@@ -28,10 +28,10 @@ if ($staged) {
     Write-Host "`nFichiers qui vont partir :" -ForegroundColor Cyan
     $staged | ForEach-Object { Write-Host "  $_" }
     Write-Host "`nDétail :" -ForegroundColor Cyan
-    git diff --cached --stat
+    git --no-pager diff --cached --stat=100 | Select-Object -Last 15
 } else {
     Write-Host "`nCommits locaux pas encore poussés :" -ForegroundColor Cyan
-    git log --oneline "origin/$branch..HEAD"
+    git --no-pager log --oneline "origin/$branch..HEAD"
 }
 if ((Read-Host "`nPublier sur $name ($branch) ? (o/N)") -notmatch '^[oOyY]') { git reset -q; Write-Host "Annulé, rien n'est parti."; exit 1 }
 
