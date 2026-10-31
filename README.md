@@ -10,6 +10,12 @@ GeoGuessr licence-plate trainer: multiple choice, duel between two lookalikes, o
 ## Deploy on GitHub Pages
 Push the contents of this folder (index.html, data/, images/) to a repo → Settings → Pages → Deploy from branch `main` / root.
 
+## Free-licence plates from Wikimedia Commons
+For the countries with fewer than 2 plates (GeoGuessr tiers 1-2, from `tgm-core.js`):
+1. `commons-plates.cmd` (or `python tools/fetch_commons_plates.py [PL DE …] [--per 4]`): slow and cached, keeps only CC0 / public domain / CC BY / CC BY-SA files, writes `_commons/` (ignored by Git) and opens `_commons/review.html`.
+2. Tick the plates to keep, "Export selection" saves `selection.json`.
+3. `python tools/add_commons_plates.py selection.json`: copies them to `images/commons/` and appends them to `data/plates.js` with `credit` (author · licence) and `creditUrl` (Commons page), shown under the plate. Then fill in their tags, lookalikes and note.
+
 ## Adding plates
 Drop the image in `images/` and add a line to `data/plates.js`:
 

@@ -103,11 +103,68 @@
     },
   };
 
+  // ---------------------------------------------------------------- confusions communes
+  // localStorage tgm.confusions = { v: 1, ev: [[t, app, truth, answer, detail?], ...], seed: { app: [[truth, answer, n], ...] } }
+  //   ev   : une ligne par erreur « truth pris pour answer » (ISO), t = Date.now() ; 3 000 dernières gardées
+  //   seed : historique d'avant (sans date) repris des clés de chaque trainer, réécrit à chaque ouverture
+  var CKEY = 'tgm.confusions', CMAX = 3000;
+  function cload() { var d = lsGet(CKEY, null); return d && d.v === 1 ? d : { v: 1, ev: [], seed: {} }; }
+  var confusions = {
+    add: function (app, truth, answer, detail) {
+      truth = up(truth); answer = up(answer);
+      if (!/^[A-Z]{2}$/.test(truth) || !/^[A-Z]{2}$/.test(answer) || truth === answer) return;
+      var d = cload(), e = [Date.now(), app, truth, answer];
+      if (detail) e.push(String(detail).slice(0, 60));
+      d.ev.push(e);
+      if (d.ev.length > CMAX) d.ev = d.ev.slice(-CMAX);
+      lsSet(CKEY, d);
+    },
+    seed: function (app, list) {     // list: [[truth, answer, n], ...] — remplace le précédent seed de cette app
+      var d = cload(), clean = [];
+      (list || []).forEach(function (x) {
+        var a = up(x[0]), b = up(x[1]), n = +x[2] || 0;
+        if (/^[A-Z]{2}$/.test(a) && /^[A-Z]{2}$/.test(b) && a !== b && n > 0) clean.push([a, b, n]);
+      });
+      d.seed[app] = clean; lsSet(CKEY, d);
+    },
+    // paires agrégées, les deux sens réunis : [{ a, b, n, byApp: {app: n}, last }] triées par n
+    // opts: { days: n (seulement les erreurs datées des n derniers jours), iso: 'PL' (paires qui le touchent), app: 'plates' }
+    pairs: function (opts) {
+      opts = opts || {};
+      var d = cload(), since = opts.days ? Date.now() - opts.days * 864e5 : 0, map = {};
+      function put(app, a, b, n, t) {
+        if (opts.iso && a !== up(opts.iso) && b !== up(opts.iso)) return;
+        if (opts.app && app !== opts.app) return;
+        var k = a < b ? a + '|' + b : b + '|' + a, p = map[k];
+        if (!p) p = map[k] = { a: k.slice(0, 2), b: k.slice(3), n: 0, byApp: {}, last: 0 };
+        p.n += n; p.byApp[app] = (p.byApp[app] || 0) + n; if (t > p.last) p.last = t;
+      }
+      // tout l'historique : le seed d'une app (ses propres compteurs, à jour) inclut déjà ses événements datés
+      var seeded = opts.days ? {} : d.seed, last = {};
+      d.ev.forEach(function (e) {
+        var k = e[1] + e[2] + e[3]; if (e[0] > (last[k] || 0)) last[k] = e[0];
+        if (e[0] >= since && !seeded[e[1]]) put(e[1], e[2], e[3], 1, e[0]);
+      });
+      Object.keys(seeded).forEach(function (app) { seeded[app].forEach(function (x) { put(app, x[0], x[1], x[2], last[app + x[0] + x[1]] || 0); }); });
+      return Object.keys(map).map(function (k) { return map[k]; }).sort(function (x, y) { return y.n - x.n || y.last - x.last; });
+    },
+    events: function () { return cload().ev.slice(); },
+    // trainers qui écrivent des confusions : nom affiché, lien direct ({iso} en minuscules)
+    apps: {
+      'plate-trainer': { name: 'Plates', url: 'https://tgm-hub.github.io/plate-trainer/#{iso}' },
+      'bollards': { name: 'Bollards', url: 'https://tgm-hub.github.io/bollards-trainer/#{iso}' },
+      'sign-reader': { name: 'Sign Reader', url: 'https://tgm-hub.github.io/script-identifier-geoguessr/#{iso}' },
+      'city-placer': { name: 'City Placer', url: 'https://tgm-hub.github.io/city-placer/#{iso}' },
+      'clue-fusion': { name: 'Clue Fusion', url: 'https://tgm-hub.github.io/clue-fusion/#{iso}' },
+    },
+    link: function (app, iso) { var a = confusions.apps[app]; return a ? a.url.replace('{iso}', String(iso).toLowerCase()) : null; },
+  };
+
   root.TGM = {
     version: VERSION, countries: C, continents: CONTINENTS, tierNames: TIER_NAMES,
     country: country, has: function (iso) { return !!country(iso); }, isos: isos,
     tier: tier, tierDefault: tierDefault, name: name, flag: flag, continent: function (iso) { var c = country(iso); return c ? c.continent : null; },
     plonkitUrl: plonkitUrl, svUrl: svUrl, topoUrl: topoUrl,
-    stats: stats,
+    stats: stats, confusions: confusions,
   };
 })(typeof window !== 'undefined' ? window : this);
