@@ -294,6 +294,7 @@ main.wide{max-width:1480px}
 </main>
 <div class="lb" id="lb"><img id="lbimg" alt=""></div>
 
+<script src="tgm-core.js"></script>
 <script src="data/countries.js"></script>
 <script src="data/plates.js"></script>
 <script src="data/pairs.js"></script>
@@ -397,7 +398,8 @@ main.wide{max-width:1480px}
 
   // ---------- distractors ----------
   const jitter = () => Math.random() * 0.9;
-  // GeoGuessr frequency tiers (same defaults as city-placer; its per-country overrides in cp.prefs win)
+  // GeoGuessr frequency tiers: shared countries.json via tgm-core.js (the Atlas core); city-placer overrides in cp.prefs win.
+  // The list below is only a fallback when tgm-core.js is missing.
   const TIER_DEF = {};
   [['US CA MX BR AR CL CO PE AU NZ JP KR ID PH MY TH IN RU UA TR ZA FR ES IT DE GB PL RO SE NO FI', 1],
    ['PT IE NL BE CH AT CZ SK HU SI HR RS BG GR AL MK ME DK EE LV LT IS TW VN KH LA LK BD KZ KG MN EC BO UY GT DO PA PR KE NG GH SN UG BW TN IL JO AE', 2],
@@ -405,7 +407,7 @@ main.wide{max-width:1480px}
     .forEach(([l, t]) => l.split(' ').forEach(k => TIER_DEF[k] = t));
   let TIER_OV = {};
   try { TIER_OV = (JSON.parse(localStorage.getItem('cp.prefs') || '{}').tierOv) || {}; } catch (e) {}
-  const tierOf = name => { const iso = C[name] && C[name].f; return iso ? +(TIER_OV[iso] || TIER_DEF[iso] || 4) : 4; };
+  const tierOf = name => { const iso = C[name] && C[name].f; return !iso ? 4 : window.TGM ? TGM.tier(iso) : +(TIER_OV[iso] || TIER_DEF[iso] || 4); };
   function countryScore(plate, name) {
     let s = jitter();
     if (plate.lookalikes.includes(name)) s += 100;
@@ -463,6 +465,24 @@ main.wide{max-width:1480px}
     const h = HIST[hkey(p)] ||= [0, 0, 0];
     h[0]++; if (ok) { h[1]++; h[2] = Math.min(5, h[2] + 1); } else h[2] = 0;
     try { localStorage.setItem(HIST_KEY, JSON.stringify(HIST)); } catch (e) {}
+    pushStats();
+  }
+  // Shared summary for the Atlas daily review (tgm.stats.plate-trainer, see tgm-core.js); this app keeps its own keys.
+  // Items: country plates + every regional crop (Mexico, US, Canada) ; regional items count for their country.
+  function pushStats() {
+    if (!window.TGM) return;
+    const isoOf = {};
+    PLATES.forEach(p => { if (C[p.country]) isoOf[hkey(p)] = C[p.country].f; });
+    const tot = {};
+    PLATES.forEach(p => { const i = C[p.country] && C[p.country].f; if (i) tot[i] = (tot[i] || 0) + 1; });
+    Object.entries(RG).forEach(([rk, g]) => Object.entries(g.units || {}).forEach(([code, u]) => u.designs.forEach(d => d.crops.forEach(c => {
+      const k = rk + '|' + code + '|' + c.img, i = rk.toUpperCase();
+      isoOf[k] = i; tot[i] = (tot[i] || 0) + 1;
+    }))));
+    const s = TGM.stats.fromLeitner(HIST, k => isoOf[k] || null);
+    for (const i in s.byCountry) if (tot[i]) s.byCountry[i].total = tot[i];
+    s.total = Object.values(tot).reduce((a, b) => a + b, 0);
+    TGM.stats.write('plate-trainer', s);
   }
   // weighted shuffle: low Leitner boxes (and unseen plates) tend to come first
   function weightedShuffle(list) {
@@ -911,6 +931,7 @@ main.wide{max-width:1480px}
   }
   window.addEventListener('hashchange', applyHash);
   initStudy();
+  pushStats();
   if (!applyHash()) show('setup');
 })();
 </script>
