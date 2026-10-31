@@ -149,13 +149,13 @@
       return Object.keys(map).map(function (k) { return map[k]; }).sort(function (x, y) { return y.n - x.n || y.last - x.last; });
     },
     events: function () { return cload().ev.slice(); },
-    // trainers qui écrivent des confusions : nom affiché, lien direct ({iso} en minuscules)
+    // trainers qui écrivent des confusions : nom affiché, lien vers le mode exploration du pays ({iso} en minuscules)
     apps: {
       'plate-trainer': { name: 'Plates', url: 'https://tgm-hub.github.io/plate-trainer/#{iso}' },
       'bollards': { name: 'Bollards', url: 'https://tgm-hub.github.io/bollards-trainer/#{iso}' },
       'sign-reader': { name: 'Sign Reader', url: 'https://tgm-hub.github.io/script-identifier-geoguessr/#{iso}' },
-      'city-placer': { name: 'City Placer', url: 'https://tgm-hub.github.io/city-placer/#{iso}' },
-      'clue-fusion': { name: 'Clue Fusion', url: 'https://tgm-hub.github.io/clue-fusion/#{iso}' },
+      'city-placer': { name: 'City Placer', url: 'https://tgm-hub.github.io/city-placer/#explore/{iso}' },
+      'clue-fusion': { name: 'Clue Fusion', url: 'https://tgm-hub.github.io/clue-fusion/#explore/{iso}' },
     },
     link: function (app, iso) { var a = confusions.apps[app]; return a ? a.url.replace('{iso}', String(iso).toLowerCase()) : null; },
   };
