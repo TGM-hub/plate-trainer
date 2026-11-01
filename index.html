@@ -138,6 +138,8 @@ h3{margin:18px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06e
 .rmap .units path.nodata{fill:#2a2f3f}
 .rmap .units path.sel{stroke:#fff;stroke-width:2}
 img.blurred{filter:blur(3px)}
+/* Street View look: the plate's colours and shape stay, the characters do not (question only, sharp once answered) */
+img.svblur{filter:blur(var(--svb,10px))}
 .strip{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
 .strip .thumb{flex:none;height:64px;width:auto;background:#0b0c10;border-radius:6px;overflow:hidden;cursor:zoom-in;display:flex;align-items:center}
 .strip .thumb img{height:64px;width:auto;display:block}
@@ -245,6 +247,11 @@ main.wide{max-width:1480px}
     <div class="row" id="opt-continents"></div>
     <h3>Category</h3>
     <div class="row" id="opt-category"></div>
+    <h3>Plates</h3>
+    <div class="row" id="opt-svblur">
+      <div class="chip" data-v="on">Blurred, as on Street View</div>
+      <div class="chip" data-v="off">Sharp</div>
+    </div>
     </div>
     <div id="region-opts" class="hidden-el">
       <div id="recent-row"><h3>Plates</h3>
@@ -334,7 +341,7 @@ main.wide{max-width:1480px}
   const inCat = (p, cat) => cat === 'all' || (cat === 'ml' ? p.mustLearn : p.tags.includes(cat));
 
   // ---------- settings ----------
-  const DEF = { game: 'countries', mode: 'mcq', continents: CONTINENTS.slice(), category: 'all', length: '20' };
+  const DEF = { game: 'countries', mode: 'mcq', continents: CONTINENTS.slice(), category: 'all', length: '20', svblur: 'on' };
   let S = DEF;
   try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('plateTrainer.settings') || '{}')); } catch (e) {}
   if (!['mcq', 'duel', 'type'].includes(S.mode)) S.mode = 'mcq';
@@ -346,7 +353,7 @@ main.wide{max-width:1480px}
     const el = $(id);
     el.querySelectorAll('.chip').forEach(ch => ch.onclick = () => { S[key] = ch.dataset.v; save(); renderSetup(); });
   }
-  bindSingle('#opt-mode', 'mode'); bindSingle('#opt-length', 'length');
+  bindSingle('#opt-mode', 'mode'); bindSingle('#opt-length', 'length'); bindSingle('#opt-svblur', 'svblur');
 
   // Regional rounds: one item per Street View crop; country = region name so summary/retry work unchanged
   const regionName = (rk, code) => (RM[rk].units.find(u => u.code === code) || {}).name || code;
@@ -379,7 +386,7 @@ main.wide{max-width:1480px}
       });
     }
     $('#opt-recent').querySelectorAll('.chip').forEach(ch => { ch.classList.toggle('on', (S.recentOnly ? 'recent' : 'all') === ch.dataset.v); ch.onclick = () => { S.recentOnly = ch.dataset.v === 'recent'; save(); renderSetup(); }; });
-    ['#opt-mode:mode', '#opt-length:length'].forEach(x => {
+    ['#opt-mode:mode', '#opt-length:length', '#opt-svblur:svblur'].forEach(x => {
       const [id, k] = x.split(':');
       $(id).querySelectorAll('.chip').forEach(ch => ch.classList.toggle('on', ch.dataset.v === S[k]));
     });
@@ -522,6 +529,8 @@ main.wide{max-width:1480px}
     const p = Q.items[Q.i];
     $('#qimg').src = p.img;
     $('#qimg').classList.toggle('blurred', !!p.blur);
+    $('#qimg').classList.toggle('svblur', !p.region && !p.blur && S.svblur !== 'off');   // regional crops are already Street View crops
+    svbSize();
     const veh = vehicleOf(p);
     $('#vbadge').classList.toggle('hidden-el', !veh);
     if (veh) $('#vbadge').textContent = VEH[veh] || veh;
@@ -687,6 +696,7 @@ main.wide{max-width:1480px}
   }
 
   function finish(p, answer) {
+    $('#qimg').classList.remove('svblur');
     const ok = answer === p.country;
     record(p, ok);
     if (ok) Q.ok++; else { Q.missed.push({ p, answer }); recordMix(p.country, answer); }
@@ -899,9 +909,16 @@ main.wide{max-width:1480px}
 
   // ---------- chrome ----------
   function wireThumbs(root) { root.querySelectorAll('.thumb').forEach(t => t.onclick = () => openLb(t.dataset.img)); }
-  const openLb = src => { $('#lbimg').src = src; $('#lb').classList.add('on'); };
+  // blur radius follows the size the photo is drawn at (object-fit: contain, so not the box): about 15 % of its height,
+  // so close-ups and whole-car photos both lose their characters while colours and shape stay
+  const svbOf = im => { const r = im.getBoundingClientRect(), k = im.naturalWidth ? im.naturalHeight / im.naturalWidth : 0.3;
+    return Math.max(5, Math.round(Math.min(r.height, r.width * k) * 0.15)) + 'px'; };
+  const svbSize = () => { const im = $('#qimg'); if (im.classList.contains('svblur') && im.naturalWidth) im.style.setProperty('--svb', svbOf(im)); };
+  $('#qimg').addEventListener('load', svbSize); addEventListener('resize', svbSize);
+  const openLb = (src, cls) => { const im = $('#lbimg'); im.src = src; im.className = cls || ''; $('#lb').classList.add('on');
+    if (cls) { const set = () => im.style.setProperty('--svb', svbOf(im)); im.complete ? set() : (im.onload = set); } };
   $('#lb').onclick = () => $('#lb').classList.remove('on');
-  $('#qimgwrap').onclick = () => openLb($('#qimg').src);
+  $('#qimgwrap').onclick = () => openLb($('#qimg').src, $('#qimg').classList.contains('svblur') ? 'svblur' : '');
 
   function show(which) {
     ['setup', 'quiz', 'summary', 'study'].forEach(id => $('#' + id).classList.toggle('hidden-el', id !== which));

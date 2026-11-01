@@ -156,6 +156,7 @@
       'sign-reader': { name: 'Sign Reader', url: 'https://tgm-hub.github.io/script-identifier-geoguessr/#{iso}' },
       'city-placer': { name: 'City Placer', url: 'https://tgm-hub.github.io/city-placer/#explore/{iso}' },
       'clue-fusion': { name: 'Clue Fusion', url: 'https://tgm-hub.github.io/clue-fusion/#explore/{iso}' },
+      'duels': { name: 'Duels', url: 'https://tgm-hub.github.io/Atlas/games.html#{iso}' },
     },
     link: function (app, iso) { var a = confusions.apps[app]; return a ? a.url.replace('{iso}', String(iso).toLowerCase()) : null; },
   };
